@@ -2,32 +2,11 @@
 
 Sistema completo de gestión de recursos humanos construido con Next.js, TypeScript, Prisma y PostgreSQL.
 
-## Estructura del Proyecto
-
-```
-web/                         # Repositorio principal
-├── deploy/                  # Deploy y configuración de producción
-│   ├── deploy.sh            # Deploy automático Linux/macOS
-│   ├── deploy.bat           # Deploy automático Windows  
-│   ├── maintenance.sh       # Herramientas de mantenimiento
-│   ├── nginx/               # Configuraciones Nginx + SSL
-│   └── postgres/            # Inicialización PostgreSQL
-├── src/
-│   ├── app/                 # App Router (Next.js 14)
-│   ├── components/          # Componentes reutilizables
-│   ├── types/               # Definiciones TypeScript
-│   └── utils/               # Utilidades y helpers
-├── prisma/                  # Schema y migraciones
-├── docker-compose.yml       # Orquestación de servicios
-├── .env.example             # Variables de entorno
-└── package.json
-```
-
 ## Tecnologías
 
-- **Frontend**: Next.js 15, TypeScript, Tailwind CSS, shadcn/ui
+- **Frontend**: Next.js, TypeScript, Tailwind CSS, shadcn/ui
 - **Backend**: API Routes, NextAuth.js, Prisma ORM
-- **Base de Datos**: PostgreSQL 15
+- **Base de Datos**: PostgreSQL
 - **Deploy**: Docker, Nginx, Let's Encrypt SSL
 - **UI Components**: React Hook Form, Zod, Lucide React
 
@@ -47,7 +26,6 @@ nano .env  # Editar credenciales
 
 # 2. Ejecutar deploy
 ./deploy/deploy.sh          # Linux/macOS
-deploy\deploy.bat          # Windows
 
 # 3. Verificar
 curl https://descubre.emma.pe
@@ -94,15 +72,6 @@ npm run db:reset     # Resetear base de datos
 ```
 
 ## Base de Datos
-
-### Modelos Principales
-
-- **Users**: Gestión de usuarios y roles (admin, editor, guest, reader)
-- **Blogs**: Sistema de gestión de contenido
-- **Jobs & Recruitment**: Ofertas de trabajo y reclutamiento
-- **Contacts & Subscriptions**: Gestión de contactos y suscripciones
-- **Notifications**: Sistema de notificaciones
-- **Files**: Gestión de archivos y uploads
 
 ### Migraciones
 
@@ -177,30 +146,5 @@ docker stats
 # Estado de servicios
 docker-compose ps
 ```
-
-## Seguridad
-
-- **SSL/TLS**: Certificados automáticos Let's Encrypt
-- **Headers**: Security headers (HSTS, CSP, etc.)
-- **Rate Limiting**: Protección contra ataques DDoS
-- **Autenticación**: Sistema robusto de roles y permisos
-- **Validación**: Validación de datos con Zod
-- **CORS**: Configuración segura de CORS
-
-## Performance
-
-- **SSR/SSG**: Renderizado optimizado con Next.js
-- **Caching**: Cache inteligente de recursos estáticos
-- **Compresión**: Gzip activado en Nginx
-- **CDN Ready**: Preparado para CDN
-- **Database**: PostgreSQL optimizada para producción
-
-## Contribución
-
-1. Fork el proyecto
-2. Crear feature branch (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit cambios (`git commit -m 'Agregar nueva funcionalidad'`)
-4. Push al branch (`git push origin feature/nueva-funcionalidad`)
-5. Abrir Pull Request
 
 **¡EMMA HR Software - Gestión de recursos humanos moderna y eficiente!**
