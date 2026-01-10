@@ -1,0 +1,432 @@
+generator client {
+  provider   = "prisma-client"
+  output     = "./generated/prisma"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model tbl_users {
+  id         Int             @id @default(autoincrement())
+  username   String          @unique @db.VarChar(120)
+  email      String          @unique @db.VarChar(180)
+  password   String          @db.VarChar(255)
+  role       enum_user_roles @default(guest)
+  first_name String?         @db.VarChar(100)
+  last_name  String?         @db.VarChar(100)
+  phone      String?         @db.VarChar(40)
+  avatar_url String?         @db.VarChar(500)
+  is_active  Boolean         @default(true)
+
+  // Relaciones con control interno
+  created_by    Int?
+  creator       tbl_users?  @relation("UserCreator", fields: [created_by], references: [id])
+  created_users tbl_users[] @relation("UserCreator")
+
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  // Relaciones existentes
+  blogs tbl_blogs[]
+
+  // Nuevas relaciones para EMMA
+  created_courses    tbl_courses[]            @relation("CourseCreator")
+  course_assignments tbl_course_assignments[]
+  course_progresses  tbl_course_progresses[]
+  certificates       tbl_certificates[]
+  audit_logs         tbl_audit_logs[]
+
+  @@index([is_active], map: "users_active_idx")
+}
+
+model tbl_blogs {
+  id          Int     @id @default(autoincrement())
+  title       String  @db.VarChar(180)
+  description String?
+  content     String
+
+  author_id Int
+  author    tbl_users @relation(fields: [author_id], references: [id])
+
+  slug   String            @unique @db.VarChar(200)
+  status enum_blogs_status @default(draft)
+
+  pub_date   DateTime  @default(now()) @db.Timestamptz(6)
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  @@index([author_id], map: "blogs_author_idx")
+  @@index([status, pub_date], map: "blogs_status_pubdate_idx")
+}
+
+model tbl_contacts {
+  id      Int                  @id @default(autoincrement())
+  name    String               @db.VarChar(160)
+  email   String               @db.VarChar(180)
+  phone   String?              @db.VarChar(40)
+  company String?              @db.VarChar(160)
+  subject String?              @db.VarChar(200)
+  message String
+  notes   Json                 @default("[]")
+  status  enum_contacts_status @default(new)
+
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  @@index([status, created_at], map: "contacts_status_created_idx")
+}
+
+model tbl_files {
+  id           Int    @id @default(autoincrement())
+  filename     String @db.VarChar(255)
+  path         String @db.VarChar(255)
+  related_type String @db.VarChar(255)
+  related_id   Int
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @updatedAt @db.Timestamptz(6)
+}
+
+model tbl_job_positions {
+  id               Int     @id @default(autoincrement())
+  title            String  @db.VarChar(180)
+  description      String?
+  department       String? @db.VarChar(120)
+  location         String  @default("Remoto") @db.VarChar(120)
+  employment_type  String  @default("Tiempo completo") @db.VarChar(120)
+  salary_min       Int?
+  salary_max       Int?
+  requirements     Json?
+  responsibilities Json?
+  experience_min   Int     @default(0)
+  is_active        Boolean @default(true)
+  is_featured      Boolean @default(false)
+
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  recruitments tbl_recruitments[]
+
+  @@index([is_active, is_featured], map: "job_positions_flags_idx")
+}
+
+model tbl_notifications {
+  id                Int                                  @id @default(autoincrement())
+  title             String                               @db.VarChar(180)
+  description       String?
+  notification_type enum_notifications_notification_type
+  action_url        String?                              @db.VarChar(500)
+  action_text       String?                              @db.VarChar(160)
+  is_active         Boolean                              @default(true)
+  dismissible       Boolean                              @default(true)
+  show_on_pages     enum_notifications_show_on_pages     @default(all)
+
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  @@index([is_active, notification_type], map: "notifications_active_type_idx")
+}
+
+model tbl_recruitments {
+  id                 Int                      @id @default(autoincrement())
+  name               String                   @db.VarChar(160)
+  email              String                   @db.VarChar(180)
+  phone              String?                  @db.VarChar(40)
+  position           String                   @db.VarChar(160)
+  experience         String?
+  salary_expectation String?                  @db.VarChar(120)
+  cover_letter       String?
+  status             enum_recruitments_status @default(new)
+
+  position_id   Int?
+  job_positions tbl_job_positions? @relation(fields: [position_id], references: [id])
+
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  @@index([position_id], map: "recruitments_position_idx")
+  @@index([status, created_at], map: "recruitments_status_created_idx")
+}
+
+model tbl_slides {
+  id          Int                     @id @default(autoincrement())
+  title       String                  @db.VarChar(180)
+  subtitle    String?                 @db.VarChar(220)
+  description String?
+  button_text String                  @default("Conoce más") @db.VarChar(120)
+  button_link String                  @default("/about") @db.VarChar(300)
+  visual_type enum_slides_visual_type @default(dashboard)
+  is_active   Boolean                 @default(true)
+  sort_order  Int                     @default(0)
+
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  @@index([is_active, sort_order], map: "slides_active_sort_idx")
+}
+
+model tbl_subscriptions {
+  id       Int                       @id @default(autoincrement())
+  email    String                    @unique @db.VarChar(180)
+  type     enum_subscriptions_type   @default(general)
+  status   enum_subscriptions_status @default(active)
+  source   String?                   @db.VarChar(160)
+  metadata Json?
+
+  subscribed_at   DateTime  @default(now()) @db.Timestamptz(6)
+  unsubscribed_at DateTime? @db.Timestamptz(6)
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at      DateTime? @db.Timestamptz(6)
+
+  @@index([status, type])
+}
+
+model tbl_testimonials {
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(160)
+  position    String? @db.VarChar(160)
+  company     String? @db.VarChar(160)
+  content     String
+  rating      Int     @default(5)
+  is_active   Boolean @default(true)
+  is_featured Boolean @default(false)
+
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  @@index([is_active, is_featured], map: "testimonials_flags_idx")
+}
+
+model tbl_courses {
+  id             Int                @id @default(autoincrement())
+  title          String             @db.VarChar(200)
+  description    String?
+  content        String?
+  duration_hours Int?               @default(0)
+  instructor     String?            @db.VarChar(160)
+  category       String?            @db.VarChar(100)
+  meeting_link   String?            @db.VarChar(500)
+  max_students   Int?               @default(0)
+  status         enum_course_status @default(draft)
+  is_active      Boolean            @default(true)
+
+  // Metadatos de auditoría
+  created_by Int
+  creator    tbl_users @relation("CourseCreator", fields: [created_by], references: [id])
+
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  // Relaciones
+  assignments  tbl_course_assignments[]
+  materials    tbl_course_materials[]
+  progresses   tbl_course_progresses[]
+  certificates tbl_certificates[]
+
+  @@index([status, is_active], map: "courses_status_active_idx")
+  @@index([created_by], map: "courses_creator_idx")
+  @@index([category], map: "courses_category_idx")
+}
+
+model tbl_course_materials {
+  id            Int                @id @default(autoincrement())
+  course_id     Int
+  title         String             @db.VarChar(200)
+  description   String?
+  file_path     String?            @db.VarChar(500)
+  file_url      String?            @db.VarChar(500)
+  material_type enum_material_type
+  file_size     Int?               @default(0)
+  sort_order    Int                @default(0)
+  is_required   Boolean            @default(false)
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @updatedAt @db.Timestamptz(6)
+
+  course tbl_courses @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+  @@index([course_id, sort_order], map: "materials_course_order_idx")
+}
+
+model tbl_course_assignments {
+  id           Int                    @id @default(autoincrement())
+  course_id    Int
+  user_id      Int
+  assigned_by  Int
+  status       enum_assignment_status @default(pending)
+  assigned_at  DateTime               @default(now()) @db.Timestamptz(6)
+  started_at   DateTime?              @db.Timestamptz(6)
+  completed_at DateTime?              @db.Timestamptz(6)
+  due_date     DateTime?              @db.Timestamptz(6)
+  notes        String?
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @updatedAt @db.Timestamptz(6)
+
+  course   tbl_courses            @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  user     tbl_users              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  progress tbl_course_progresses?
+
+  @@unique([course_id, user_id])
+  @@index([user_id, status], map: "assignments_user_status_idx")
+  @@index([course_id, status], map: "assignments_course_status_idx")
+  @@index([assigned_by], map: "assignments_assigned_by_idx")
+}
+
+model tbl_course_progresses {
+  id                  Int       @id @default(autoincrement())
+  assignment_id       Int       @unique
+  user_id             Int
+  course_id           Int
+  progress_percentage Int       @default(0)
+  current_module      String?   @db.VarChar(200)
+  time_spent_minutes  Int       @default(0)
+  last_accessed_at    DateTime? @db.Timestamptz(6)
+  completion_notes    String?
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @updatedAt @db.Timestamptz(6)
+
+  assignment tbl_course_assignments @relation(fields: [assignment_id], references: [id], onDelete: Cascade)
+  user       tbl_users              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  course     tbl_courses            @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id, course_id], map: "progress_user_course_idx")
+}
+
+model tbl_certificates {
+  id               Int      @id @default(autoincrement())
+  user_id          Int
+  course_id        Int
+  certificate_code String   @unique @db.VarChar(100)
+  issued_at        DateTime @default(now()) @db.Timestamptz(6)
+  file_path        String?  @db.VarChar(500)
+  file_url         String?  @db.VarChar(500)
+  template_used    String?  @db.VarChar(100)
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @updatedAt @db.Timestamptz(6)
+
+  user  tbl_users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  course tbl_courses @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, course_id])
+  @@index([certificate_code], map: "certificates_code_idx")
+  @@index([issued_at], map: "certificates_issued_idx")
+}
+
+model tbl_audit_logs {
+  id          Int     @id @default(autoincrement())
+  user_id     Int?
+  action      String  @db.VarChar(100)
+  entity_type String  @db.VarChar(50)
+  entity_id   Int?
+  old_values  Json?
+  new_values  Json?
+  ip_address  String? @db.VarChar(45)
+  user_agent  String? @db.VarChar(500)
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  user tbl_users? @relation(fields: [user_id], references: [id], onDelete: SetNull)
+
+  @@index([user_id, created_at], map: "audit_user_date_idx")
+  @@index([entity_type, entity_id], map: "audit_entity_idx")
+  @@index([action], map: "audit_action_idx")
+}
+
+// ============= ENUMERACIONES EXISTENTES =============
+
+enum enum_blogs_status {
+  draft
+  published
+  archived
+}
+
+enum enum_contacts_status {
+  new
+  read
+  replied
+}
+
+enum enum_notifications_notification_type {
+  system
+  news
+  event
+  promotion
+  warning
+}
+
+enum enum_notifications_show_on_pages {
+  all
+  home
+  specific
+}
+
+enum enum_recruitments_status {
+  new
+  reviewing
+  interview
+  hired
+  rejected
+}
+
+enum enum_slides_visual_type {
+  dashboard
+  analytics
+  team
+  growth
+  innovation
+}
+
+enum enum_subscriptions_status {
+  active
+  unsubscribed
+}
+
+enum enum_subscriptions_type {
+  general
+  career
+  blog
+}
+
+enum enum_user_roles {
+  admin
+  editor
+  guest
+  reader
+}
+
+enum enum_course_status {
+  draft
+  published
+  archived
+  inactive
+}
+
+enum enum_assignment_status {
+  pending
+  in_progress
+  completed
+  expired
+}
+
+enum enum_material_type {
+  pdf
+  video
+  link
+  document
+  presentation
+}
