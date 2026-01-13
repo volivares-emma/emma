@@ -16,7 +16,7 @@ NC='\033[0m'
 # Variables
 SSL_ENABLED=false
 DOMAIN="descubre.emma.pe"
-EMAIL="admin@emma.pe"
+EMAIL="victor.olivares@emma.pe"
 
 # Funciones auxiliares
 log() {
@@ -67,7 +67,7 @@ log "Verificando configuración DNS..."
 if nslookup $DOMAIN > /dev/null 2>&1; then
     log "DNS configurado correctamente para $DOMAIN"
 else
-    warn "⚠️ DNS no resuelve para $DOMAIN"
+    warn "DNS no resuelve para $DOMAIN"
     warn "Asegúrate de que el dominio apunte al IP de este servidor"
     echo -n "¿Continuar de todos modos? (y/N): "
     read -r CONTINUE_DNS
@@ -92,7 +92,7 @@ if [ ! -f ".env" ]; then
     if [ -f ".env.example" ]; then
         log "Creando archivo .env desde .env.example..."
         cp .env.example .env
-        warn "⚠️  IMPORTANTE: Edita .env con tus credenciales de producción"
+        warn "IMPORTANTE: Edita .env con tus credenciales de producción"
         warn "Variables críticas:"
         warn "- POSTGRES_PASSWORD (debe ser segura)"
         warn "- NEXTAUTH_SECRET (mínimo 32 caracteres)"
@@ -161,7 +161,7 @@ log "Ejecutando migraciones de base de datos..."
 docker-compose exec -T webapp npx prisma migrate deploy
 
 log "Ejecutando seeders de datos iniciales..."
-docker-compose exec -T webapp npm run seed
+docker-compose exec -T webapp sh -c "NODE_ENV=production npx prisma db seed"
 
 # 12. Verificar aplicación en HTTP
 log "Verificando aplicación en HTTP..."
@@ -170,7 +170,7 @@ if curl -f "http://$DOMAIN/health" > /dev/null 2>&1; then
 elif curl -f "http://$DOMAIN" > /dev/null 2>&1; then
     log "Aplicación respondiendo en HTTP (sin endpoint /health)"
 else
-    warn "⚠️ Aplicación no responde inmediatamente en HTTP"
+    warn "Aplicación no responde inmediatamente en HTTP"
     log "Continuando con obtención de SSL..."
 fi
 
@@ -196,7 +196,7 @@ else
         log "Certificados SSL obtenidos exitosamente"
         SSL_ENABLED=true
     else
-        error "❌ Fallo al obtener certificados SSL. Posibles causas:
+        error "Fallo al obtener certificados SSL. Posibles causas:
 - DNS no está configurado correctamente
 - El dominio no apunta a este servidor  
 - Let's Encrypt rate limit alcanzado
@@ -232,7 +232,7 @@ log "Verificando deploy final..."
 
 # Verificar servicios
 if ! docker-compose ps | grep -q "Up"; then
-    error "❌ Algunos servicios no están corriendo correctamente"
+    error "Algunos servicios no están corriendo correctamente"
 fi
 
 log "Estado de servicios:"
@@ -246,7 +246,7 @@ if [ "$SSL_ENABLED" = true ]; then
     elif curl -f "https://$DOMAIN" > /dev/null 2>&1; then
         log "HTTPS funcionando (sin endpoint /health)"
     else
-        warn "⚠️ HTTPS configurado pero no responde inmediatamente"
+        warn "HTTPS configurado pero no responde inmediatamente"
         warn "Puede tardar unos minutos en propagarse"
     fi
     
@@ -256,23 +256,23 @@ if [ "$SSL_ENABLED" = true ]; then
     if [ "$HTTP_STATUS" = "200" ]; then
         log "Redirección HTTP -> HTTPS funcionando"
     else
-        warn "⚠️  Redirección no funcionando correctamente (Status: $HTTP_STATUS)"
+        warn "Redirección no funcionando correctamente (Status: $HTTP_STATUS)"
     fi
 fi
 
 # 16. Resultado final
 echo ""
 echo -e "${GREEN}╔═══════════════════════════════════════╗${NC}"
-echo -e "${GREEN}║           🎉 DEPLOY EXITOSO 🎉        ║${NC}"
+echo -e "${GREEN}║             DEPLOY EXITOSO            ║${NC}"
 echo -e "${GREEN}╚═══════════════════════════════════════╝${NC}"
 echo ""
 
 if [ "$SSL_ENABLED" = true ]; then
-    log "🌐 Aplicación disponible en: https://$DOMAIN"
-    log "🔒 SSL configurado y renovación automática activa"
+    log "Aplicación disponible en: https://$DOMAIN"
+    log "SSL configurado y renovación automática activa"
 else
-    log "🌐 Aplicación disponible en: http://$DOMAIN"
-    warn "⚠️  SSL no configurado - aplicación corriendo solo en HTTP"
+    log "Aplicación disponible en: http://$DOMAIN"
+    warn "SSL no configurado - aplicación corriendo solo en HTTP"
 fi
 
 echo ""
@@ -293,5 +293,5 @@ echo ""
 if [ "$SSL_ENABLED" = true ]; then
     log "Deploy completado exitosamente con SSL"
 else
-    warn "⚠️ Deploy completado en HTTP - configura DNS para SSL"
+    warn "Deploy completado en HTTP - configura DNS para SSL"
 fi

@@ -4,7 +4,7 @@ import type { Blog, BlogCreatePayload, BlogUpdatePayload } from "@/types/blog";
 
 // GET: obtener blog por id
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params; // ✅ AWAIT params
+  const { id } = await context.params; // AWAIT params
   const idNum = Number(id);
   
   try {
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 
 // PUT: actualizar completamente un blog
 export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params; // ✅ AWAIT params
+  const { id } = await context.params; // AWAIT params
   const idNum = Number(id);
 
   try {
@@ -105,7 +105,7 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ id:
 
 // PATCH: actualizar parcialmente un blog
 export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params; // ✅ AWAIT params
+  const { id } = await context.params; // AWAIT params
   const idNum = Number(id);
 
   try {
@@ -160,7 +160,7 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
 
 // DELETE: eliminar (soft delete) un blog
 export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params; // ✅ AWAIT params
+  const { id } = await context.params; // AWAIT params
   const idNum = Number(id);
 
   try {

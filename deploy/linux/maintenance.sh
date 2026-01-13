@@ -89,9 +89,9 @@ show_status() {
     echo ""
     log "Conectividad de la aplicación:"
     if curl -s -f https://descubre.emma.pe > /dev/null; then
-        echo -e "✅ ${GREEN}Aplicación accesible en HTTPS${NC}"
+        echo -e "${GREEN}Aplicación accesible en HTTPS${NC}"
     else
-        echo -e "❌ ${RED}Aplicación NO accesible${NC}"
+        echo -e "${RED}Aplicación NO accesible${NC}"
     fi
 }
 
@@ -141,9 +141,9 @@ update_app() {
     # Verificar que funcione
     sleep 10
     if curl -s -f https://descubre.emma.pe > /dev/null; then
-        log "✅ Actualización completada exitosamente"
+        log "Actualización completada exitosamente"
     else
-        warn "❌ La aplicación no responde, verificando logs..."
+        warn "La aplicación no responde, verificando logs..."
         docker-compose logs webapp --tail=20
     fi
 }
@@ -162,7 +162,7 @@ backup_database() {
         # Comprimir backup
         gzip "$BACKUP_FILE"
         
-        log "✅ Backup completado: $BACKUP_FILE.gz"
+        log "Backup completado: $BACKUP_FILE.gz"
         
         # Limpiar backups antiguos (mantener últimos 7)
         cd "$BACKUP_DIR"
@@ -216,7 +216,7 @@ restore_database() {
     # Reiniciar aplicación
     docker-compose start webapp
     
-    log "✅ Restauración completada"
+    log "Restauración completada"
 }
 
 # Verificar salud de la aplicación
@@ -232,9 +232,9 @@ health_check() {
     echo ""
     info "Verificando conectividad HTTPS:"
     if curl -s -f -I https://descubre.emma.pe | head -1; then
-        echo -e "✅ ${GREEN}HTTPS OK${NC}"
+        echo -e "${GREEN}HTTPS OK${NC}"
     else
-        echo -e "❌ ${RED}HTTPS FALLO${NC}"
+        echo -e "${RED}HTTPS FALLO${NC}"
     fi
     
     # Verificar redirección HTTP -> HTTPS
@@ -242,27 +242,27 @@ health_check() {
     info "Verificando redirección HTTP -> HTTPS:"
     HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L http://descubre.emma.pe)
     if [ "$HTTP_STATUS" = "200" ]; then
-        echo -e "✅ ${GREEN}Redirección HTTP -> HTTPS OK${NC}"
+        echo -e "${GREEN}Redirección HTTP -> HTTPS OK${NC}"
     else
-        echo -e "❌ ${RED}Redirección FALLO (Status: $HTTP_STATUS)${NC}"
+        echo -e "${RED}Redirección FALLO (Status: $HTTP_STATUS)${NC}"
     fi
     
     # Verificar certificado SSL
     echo ""
     info "Verificando certificado SSL:"
     if openssl s_client -connect descubre.emma.pe:443 -servername descubre.emma.pe </dev/null 2>/dev/null | grep -q "Verification: OK"; then
-        echo -e "✅ ${GREEN}Certificado SSL válido${NC}"
+        echo -e "${GREEN}Certificado SSL válido${NC}"
     else
-        echo -e "❌ ${RED}Certificado SSL inválido${NC}"
+        echo -e "${RED}Certificado SSL inválido${NC}"
     fi
     
     # Verificar base de datos
     echo ""
     info "Verificando conexión a base de datos:"
     if docker-compose exec postgres pg_isready -U emma_user -d emma_db > /dev/null; then
-        echo -e "✅ ${GREEN}Base de datos OK${NC}"
+        echo -e "${GREEN}Base de datos OK${NC}"
     else
-        echo -e "❌ ${RED}Base de datos NO disponible${NC}"
+        echo -e "${RED}Base de datos NO disponible${NC}"
     fi
     
     # Verificar espacio en disco
@@ -270,11 +270,11 @@ health_check() {
     info "Verificando espacio en disco:"
     DISK_USAGE=$(df / | awk 'NR==2 {print $5}' | sed 's/%//')
     if [ "$DISK_USAGE" -lt 80 ]; then
-        echo -e "✅ ${GREEN}Espacio en disco OK ($DISK_USAGE% usado)${NC}"
+        echo -e "${GREEN}Espacio en disco OK ($DISK_USAGE% usado)${NC}"
     elif [ "$DISK_USAGE" -lt 90 ]; then
-        echo -e "⚠️  ${YELLOW}Espacio en disco limitado ($DISK_USAGE% usado)${NC}"
+        echo -e "${YELLOW}Espacio en disco limitado ($DISK_USAGE% usado)${NC}"
     else
-        echo -e "❌ ${RED}Espacio en disco crítico ($DISK_USAGE% usado)${NC}"
+        echo -e "${RED}Espacio en disco crítico ($DISK_USAGE% usado)${NC}"
     fi
 }
 
@@ -287,7 +287,7 @@ renew_ssl() {
     log "Reiniciando nginx para aplicar nuevos certificados..."
     docker-compose restart nginx
     
-    log "✅ Renovación de SSL completada"
+    log "Renovación de SSL completada"
 }
 
 # Limpiar Docker
@@ -308,7 +308,7 @@ clean_docker() {
     info "Espacio después de la limpieza:"
     docker system df
     
-    log "✅ Limpieza completada"
+    log "Limpieza completada"
 }
 
 # Reset completo (DESTRUCTIVO)
@@ -344,7 +344,7 @@ reset_app() {
     log "Ejecutando seeders..."
     docker-compose exec webapp npm run seed
     
-    log "✅ Reset completado - aplicación recreada desde cero"
+    log "Reset completado - aplicación recreada desde cero"
 }
 
 # Main

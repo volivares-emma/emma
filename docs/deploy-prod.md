@@ -253,9 +253,9 @@ cat > health-check.sh << 'EOF'
 #!/bin/bash
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://descubre.emma.pe)
 if [ $STATUS -eq 200 ]; then
-    echo "✅ Site is UP ($STATUS)"
+    echo "Site is UP ($STATUS)"
 else
-    echo "❌ Site is DOWN ($STATUS)"
+    echo "Site is DOWN ($STATUS)"
     # Reiniciar servicios si es necesario
     docker-compose restart webapp nginx
 fi

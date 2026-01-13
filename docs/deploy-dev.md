@@ -14,22 +14,33 @@ cp .env.example .env
 ### 2. Completar las variables de entorno
 Edita `.env` y rellena con tus valores reales:
 - `POSTGRES_PASSWORD`: contraseña segura para PostgreSQL
-- `NEXTAUTH_SECRET`: genera uno con `openssl rand -base64 32` o node -e `console.log(require('crypto').randomBytes(32).toString('base64'))`
+- `NEXTAUTH_SECRET`: genera uno con `openssl rand -base64 32` o `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`
 - `NEXTAUTH_URL`: `http://localhost:3000` (desarrollo)
 - Variables de Firebase (si necesitas)
 
-### 3. Iniciar los contenedores
+### 3. Ejecutar el setup completo (recomendado)
+
+**Windows (PowerShell):**
 ```bash
-docker-compose -f docker-compose.dev.yml up --build
+.\deploy\windows\setup.bat
 ```
 
-Esto iniciará:
-- **PostgreSQL** en puerto `5432`
-- **Next.js webapp** en puerto `3000` (con hot reload)
+**Linux/Mac:**
+```bash
+bash deploy/setup.sh
+```
 
-### 4. Verificar que todo funciona
-- Accede a `http://localhost:3000`
-- La base de datos se ejecutará con los datos de `deploy/postgres/init.sql`
+Este script ejecutará automáticamente:
+1. ✅ Detiene contenedores previos
+2. ✅ Inicia **PostgreSQL** en puerto `5432`
+3. ✅ Espera a que PostgreSQL esté listo
+4. ✅ Construye y levanta **Next.js webapp** en puerto `3000`
+5. ✅ **Crea la migración inicial** si no existe (te pedirá el nombre)
+6. ✅ Ejecuta las **migraciones de Prisma** (crea las tablas)
+7. ✅ Ejecuta el **seed** (carga datos iniciales)
+8. ✅ La aplicación está lista para usar
+
+**Es lo único que necesitas ejecutar.** El script maneja todo automáticamente, incluso la creación de migraciones si es la primera vez.
 
 ## Comandos útiles
 
@@ -51,8 +62,14 @@ docker-compose -f docker-compose.dev.yml down -v
 
 ### Ejecutar comandos en el contenedor
 ```bash
-docker-compose -f docker-compose.dev.yml exec webapp npm run prisma:migrate
-docker-compose -f docker-compose.dev.yml exec webapp npm run prisma:generate
+# Generar cliente de Prisma
+docker-compose -f docker-compose.dev.yml exec -T webapp npx prisma generate
+
+# Ejecutar migraciones manualmente
+docker-compose -f docker-compose.dev.yml exec -T webapp npx prisma migrate deploy
+
+# Ejecutar seed manualmente
+docker-compose -f docker-compose.dev.yml exec -T webapp npm run db:seed
 ```
 
 ### Acceder a la base de datos

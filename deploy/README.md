@@ -2,28 +2,6 @@
 
 **Directorio de deployment integrado al repositorio principal**
 
-## 📁 Estructura Interna
-
-```
-web/
-├── deploy/                   # ✅ Deploy interno al repositorio
-│   ├── deploy.sh            # Script principal Linux/macOS
-│   ├── maintenance.sh       # Herramientas de mantenimiento
-│   ├── nginx/
-│   │   ├── nginx.conf       # Configuración principal Nginx
-│   │   ├── sites-available/
-│   │   │   ├── emma-http.conf    # HTTP inicial (Fase 1)
-│   │   │   └── emma-https.conf   # HTTPS final (Fase 2)
-│   │   ├── sites-enabled/        # Symlinks configuraciones activas
-│   │   └── ssl/                  # Certificados SSL
-│   ├── postgres/
-│   │   └── init.sql         # Inicialización PostgreSQL
-│   └── README.md            # Este archivo
-├── docker-compose.yml       # Orquestación servicios
-├── .env.example            # Variables de entorno
-└── ...                     # Resto del código Next.js
-```
-
 ## ⚡ Deploy Rápido
 
 ### ⚠️ Deploy en Dos Fases
@@ -38,17 +16,17 @@ nano .env  # Editar credenciales obligatorias
 
 ### 2. Deploy Automático
 
-**Linux/macOS:**
+**Producción (Linux):**
 ```bash
 # Desde web/
-chmod +x deploy/deploy.sh
-./deploy/deploy.sh
+chmod +x deploy/linux/deploy.sh
+./deploy/linux/deploy.sh
 ```
 
-**Windows:**
+**Desarrollo (Windows):**
 ```cmd
 REM Desde web\
-deploy\deploy.bat
+deploy\windows\setup.bat
 ```
 
 ### 3. Verificación
@@ -110,6 +88,26 @@ DATABASE_URL=postgresql://emma_user:password@postgres:5432/emma_db
 # NextAuth
 NEXTAUTH_SECRET=secret_minimo_32_caracteres  
 NEXTAUTH_URL=https://descubre.emma.pe
+
+# Seed automático
+NODE_ENV=production  # Producción: solo admin. Desarrollo: todos los datos
+```
+
+## 🌱 Seed de Base de Datos
+
+**Producción (`NODE_ENV=production`):**
+- Usuario admin: `victor.olivares@emma.pe` / `Password123$`
+- Sin blogs ni slides
+
+**Desarrollo:**
+- 7 usuarios de prueba (admin, editor, reader, guest, etc.)
+- 3 blogs de demostración
+- 5 slides para página principal
+
+Ejecutar con:
+```bash
+NODE_ENV=production npx prisma db seed  # Producción
+npx prisma db seed                      # Desarrollo
 ```
 
 ## 🚨 Troubleshooting

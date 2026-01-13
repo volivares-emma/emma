@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
           pubDate: b.pub_date,
           createdAt: b.created_at,
           updatedAt: b.updated_at,
-          files, // ✅ Agregar archivos
+          files, // Agregar archivos
         };
       })
     );

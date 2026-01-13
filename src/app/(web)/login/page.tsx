@@ -28,6 +28,7 @@ import {
   Loader2,
   AlertCircle,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -61,6 +62,18 @@ function LoginForm() {
     return "/";
   };
 
+  // Mapear códigos de error a mensajes en español
+  const getErrorMessage = (error: string): string => {
+    const errorMap: Record<string, string> = {
+      MISSING_FIELDS: "Por favor completa todos los campos.",
+      USER_NOT_FOUND: "Usuario o email no encontrado. Verifica tus datos.",
+      INVALID_PASSWORD: "Contraseña incorrecta. Intenta nuevamente.",
+      ACCOUNT_DISABLED: "Tu cuenta ha sido desactivada. Contacta al administrador.",
+      CredentialsSignin: "Credenciales inválidas. Intenta nuevamente.",
+    };
+    return errorMap[error] || error || "Credenciales incorrectas.";
+  };
+
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setErrorMsg("");
@@ -69,17 +82,30 @@ function LoginForm() {
     const username = String(formData.get("username") || "");
     const password = String(formData.get("password") || "");
 
+    if (!username.trim()) {
+      setErrorMsg("Por favor ingresa tu usuario o email");
+      setLoading(false);
+      return;
+    }
+
+    if (!password.trim()) {
+      setErrorMsg("Por favor ingresa tu contraseña");
+      setLoading(false);
+      return;
+    }
+
     const res = await signIn("credentials", {
       redirect: false,
-      username,
+      username: username.trim(),
       password,
     });
 
     if (res?.error) {
       setLoading(false);
-      setErrorMsg(res.error || "Credenciales incorrectas.");
-      toast.error(res.error || "Credenciales incorrectas.");
-    } else {
+      const friendlyError = getErrorMessage(res.error);
+      setErrorMsg(friendlyError);
+      toast.error(friendlyError);
+    } else if (res?.ok) {
       // Obtener la sesión actualizada para obtener el rol
       const newSession = await getSession();
       if (newSession?.user?.role) {
@@ -90,11 +116,14 @@ function LoginForm() {
         setLoading(false);
         setErrorMsg("Error al obtener información del usuario.");
       }
+    } else {
+      setLoading(false);
+      setErrorMsg("Error desconocido. Intenta nuevamente.");
     }
   };
   return (
     <div className="h-full">
-    <div className="min-h-[90vh] grid place-items-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-50 via-white to-cyan-50 p-4">
+    <div className="min-h-[90vh] grid place-items-center bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-sky-50 via-white to-cyan-50 p-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center">
           <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-sky-600 to-cyan-600 text-white">
@@ -208,8 +237,51 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div>Cargando...</div>}>
+    <Suspense fallback={<LoginSkeleton />}>
       <LoginForm />
     </Suspense>
+  );
+}
+
+function LoginSkeleton() {
+  return (
+    <div className="h-full">
+      <div className="min-h-[90vh] grid place-items-center bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-sky-50 via-white to-cyan-50 p-4">
+        <Card className="w-full max-w-md shadow-lg">
+          <CardHeader className="text-center">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-lienar-to-br from-sky-600 to-cyan-600">
+              <Skeleton className="h-6 w-6" />
+            </div>
+            <Skeleton className="mx-auto h-6 w-32 rounded-md" />
+            <Skeleton className="mx-auto mt-2 h-4 w-48 rounded-md" />
+          </CardHeader>
+
+          <CardContent className="space-y-4">
+            {/* Usuario */}
+            <div className="space-y-3">
+              <Skeleton className="h-4 w-24 rounded-md" />
+              <Skeleton className="h-10 w-full rounded-md" />
+            </div>
+
+            {/* Contraseña */}
+            <div className="space-y-3">
+              <Skeleton className="h-4 w-24 rounded-md" />
+              <Skeleton className="h-10 w-full rounded-md" />
+            </div>
+
+            {/* Checkbox y link */}
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-4 w-20 rounded-md" />
+              <Skeleton className="h-4 w-32 rounded-md" />
+            </div>
+          </CardContent>
+
+          <CardFooter className="flex flex-col gap-2">
+            <Skeleton className="h-10 w-full rounded-md" />
+            <Skeleton className="h-3 w-40 rounded-md" />
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
   );
 }

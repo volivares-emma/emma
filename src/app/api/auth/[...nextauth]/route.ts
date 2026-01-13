@@ -25,7 +25,7 @@ export const authOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.username || !credentials?.password) {
-          return null;
+          throw new Error("MISSING_FIELDS");
         }
 
         // Buscar usuario por username o email
@@ -38,21 +38,53 @@ export const authOptions = {
           },
         });
 
-        if (
-          user &&
-          (await bcrypt.compare(credentials.password, user.password))
-        ) {
-          return { 
-            id: String(user.id), 
-            name: user.username, 
-            email: user.email,
-            role: user.role as 'admin' | 'editor' | 'guest' | 'reader'
-          };
+        if (!user) {
+          throw new Error("USER_NOT_FOUND");
         }
-        return null;
+
+        const passwordMatch = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+
+        if (!passwordMatch) {
+          throw new Error("INVALID_PASSWORD");
+        }
+
+        if (!user.is_active) {
+          throw new Error("ACCOUNT_DISABLED");
+        }
+
+        return { 
+          id: String(user.id), 
+          name: user.username, 
+          email: user.email,
+          role: user.role as 'admin' | 'editor' | 'guest' | 'reader'
+        };
       },
     }),
   ],
+  logger: {
+    error(code: string, metadata: any) {
+      // Registrar errores personalizados de autenticación
+      if (["MISSING_FIELDS", "USER_NOT_FOUND", "INVALID_PASSWORD", "ACCOUNT_DISABLED"].includes(code)) {
+        console.log(`[Auth Error] ${code}:`, metadata);
+        return;
+      }
+      // Suprimir CredentialsSignin genérico
+      if (code === "CredentialsSignin") {
+        return;
+      }
+      // Registrar otros errores
+      console.error(`[Auth Error] ${code}:`, metadata);
+    },
+    warn(message: string) {
+      console.warn(`[Auth Warning] ${message}`);
+    },
+    debug(message: string) {
+      console.debug(`[Auth Debug] ${message}`);
+    },
+  },
   callbacks: {
     async jwt({ token, user }: { token: JWT; user?: any }) {
       if (user) {

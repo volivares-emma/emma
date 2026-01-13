@@ -137,7 +137,7 @@ export default function RoadmapPage() {
 
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="font-semibold text-[#0D0D0D] mb-3">✅ Completado</h4>
+                      <h4 className="font-semibold text-[#0D0D0D] mb-3">Completado</h4>
                       <ul className="space-y-2 text-sm text-gray-600">
                         {[
                           "Configuración de Azure Infrastructure",

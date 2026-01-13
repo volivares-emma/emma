@@ -1,5 +1,5 @@
 # Dockerfile para EMMA Next.js App
-FROM node:22.11-alpine AS base
+FROM node:22.12-alpine AS base
 
 # Dependencias base
 FROM base AS deps
@@ -7,22 +7,25 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Copiar archivos de dependencias
-COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+COPY package-lock.json package.json ./
+RUN npm ci --prod
 
 # Stage para desarrollo
 FROM base AS development
 WORKDIR /app
 RUN apk add --no-cache libc6-compat
-COPY package.json package-lock.json* ./
+COPY package-lock.json package.json ./
 RUN npm ci
 
-# Variables de entorno
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV development
+# Copiar archivo .env si existe
+COPY .env* ./
 
-# Generar Prisma client
-RUN npx prisma generate
+# Copiar prisma schema
+COPY prisma ./prisma
+
+# Variables de entorno
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=development
 
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
@@ -34,11 +37,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Variables de entorno de build
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
-
-# Generar Prisma client
-RUN npx prisma generate
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
 
 # Build de la aplicación
 RUN npm run build
@@ -47,8 +47,8 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Crear usuario no-root
 RUN addgroup --system --gid 1001 nodejs
@@ -73,7 +73,7 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]

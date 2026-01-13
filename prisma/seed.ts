@@ -14,12 +14,37 @@ const prisma = new PrismaClient({
 
 async function main() {
 
-  const hashed = await bcrypt.hash('password123', 12);
+  const isProduction = process.env.NODE_ENV === 'production';
+  
+  const hashedPassword = await bcrypt.hash('Password123$', 12);
 
+  // En producción, solo crear el usuario admin
+  if (isProduction) {
+    const adminUser: Prisma.tbl_usersCreateInput = {
+      username: 'victor.olivares',
+      password: hashedPassword,
+      role: 'admin' as const,
+      first_name: 'Victor',
+      last_name: 'Olivares',
+      email: 'victor.olivares@emma.pe',
+      is_active: true
+    };
+
+    await prisma.tbl_users.upsert({
+      where: { username: adminUser.username },
+      update: {},
+      create: adminUser
+    });
+
+    console.log('Usuario administrador creado correctamente en producción');
+    return; // Salir después de crear solo el usuario admin
+  }
+
+  // En desarrollo, crear todos los usuarios
   const users: Prisma.tbl_usersCreateInput[] = [
     {
       username: 'admin',
-      password: hashed,
+      password: hashedPassword,
       role: 'admin' as const,
       first_name: 'Administrador',
       last_name: 'Sistema',
@@ -28,16 +53,16 @@ async function main() {
     },
     {
       username: 'victor.olivares',
-      password: hashed,
+      password: hashedPassword,
       role: 'admin' as const,
       first_name: 'Victor',
       last_name: 'Olivares',
-      email: 'victor.olivares@emma.com',
+      email: 'victor.olivares@emma.pe',
       is_active: true
     },
     {
       username: 'editor.test',
-      password: hashed,
+      password: hashedPassword,
       role: 'editor' as const,
       first_name: 'Editor',
       last_name: 'Contenido',
@@ -46,7 +71,7 @@ async function main() {
     },
     {
       username: 'reader.test',
-      password: hashed,
+      password: hashedPassword,
       role: 'reader' as const,
       first_name: 'Lector',
       last_name: 'Sistema',
@@ -55,7 +80,7 @@ async function main() {
     },
     {
       username: 'guest.test',
-      password: hashed,
+      password: hashedPassword,
       role: 'guest' as const,
       first_name: 'Usuario',
       last_name: 'Invitado',
@@ -64,7 +89,7 @@ async function main() {
     },
     {
       username: 'editor2.test',
-      password: hashed,
+      password: hashedPassword,
       role: 'editor' as const,
       first_name: 'Editor',
       last_name: 'Dos',
@@ -73,7 +98,7 @@ async function main() {
     },
     {
       username: 'guest2.test',
-      password: hashed,
+      password: hashedPassword,
       role: 'guest' as const,
       first_name: 'Invitado',
       last_name: 'Dos',
@@ -91,9 +116,14 @@ async function main() {
     })
   }
 
-  console.log('Usuarios sembrados correctamente')
+  console.log('Usuarios de desarrollo sembrados correctamente')
 
-  // Crear entradas de blog
+  // En producción, solo crear usuario admin - no crear blogs ni slides
+  if (isProduction) {
+    return;
+  }
+
+  // Crear entradas de blog (solo en desarrollo)
   const blogEntries = [
     {
       title: 'Automatización de Nóminas: El Cambio que tu Departamento de RRHH Necesita',
@@ -206,7 +236,7 @@ async function main() {
 
   console.log('Entradas de blog sembradas correctamente')
 
-  // Crear slides para la página principal
+  // Crear slides para la página principal (solo en desarrollo)
   const slides = [
     {
       title: 'Gestión de RRHH de Nueva Generación',
@@ -269,7 +299,7 @@ async function main() {
     })
   }
 
-  console.log('Slides sembrados correctamente')
+  console.log('Slides sembrados correctamente (solo en desarrollo)')
 }
 
 main()
