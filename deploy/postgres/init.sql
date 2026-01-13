@@ -9,7 +9,7 @@ CREATE EXTENSION IF NOT EXISTS "pg_stat_statements";
 SET timezone = 'America/Lima';
 
 -- Otorgar permisos al usuario principal
-GRANT ALL PRIVILEGES ON DATABASE emma TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE emma_db TO emma_user;
 
 -- Configuraciones de performance
 ALTER SYSTEM SET shared_preload_libraries = 'pg_stat_statements';
@@ -22,7 +22,7 @@ ALTER SYSTEM SET wal_buffers = '16MB';
 ALTER SYSTEM SET default_statistics_target = 100;
 
 -- Conectar a la base de datos creada
-\c emma
+\c emma_db
 
 -- Crear esquema público si no existe
 CREATE SCHEMA IF NOT EXISTS public;

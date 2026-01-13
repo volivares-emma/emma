@@ -114,6 +114,12 @@ set -a
 source .env
 set +a
 
+# Construir DATABASE_URL con escape adecuado
+DB_USER="${POSTGRES_USER:-emma_user}"
+DB_PASS="${POSTGRES_PASSWORD}"
+DB_NAME="${POSTGRES_DB:-emma_db}"
+DATABASE_URL="postgresql://${DB_USER}:${DB_PASS}@postgres:5432/${DB_NAME}"
+
 # 5. Crear estructura de directorios
 log "Preparando estructura de directorios..."
 mkdir -p deploy/nginx/ssl/live/$DOMAIN
@@ -164,10 +170,10 @@ done
 
 # 11. Ejecutar migraciones y seeders
 log "Ejecutando migraciones de base de datos..."
-docker-compose exec -T -e DATABASE_URL="postgresql://${POSTGRES_USER:-emma_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-emma_db}" webapp npx prisma migrate deploy
+docker-compose exec -T webapp npx prisma migrate deploy
 
 log "Ejecutando seeders de datos iniciales..."
-docker-compose exec -T -e NODE_ENV=production -e DATABASE_URL="postgresql://${POSTGRES_USER:-emma_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-emma_db}" webapp sh -c "npx prisma db seed"
+docker-compose exec -T webapp sh -c "NODE_ENV=production npx prisma db seed"
 
 # 12. Verificar aplicación en HTTP
 log "Verificando aplicación en HTTP..."
@@ -286,7 +292,7 @@ log "Comandos útiles:"
 log "Ver logs:          docker-compose logs -f"
 log "Reiniciar:         docker-compose restart"
 log "Detener:           docker-compose down"
-log "Mantenimiento:     ./deploy/maintenance.sh"
+log "Mantenimiento:     ./deploy/linux/maintenance.sh"
 log "Estado:            docker-compose ps"
 
 echo ""
