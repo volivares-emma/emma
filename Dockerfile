@@ -71,9 +71,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Copiar archivos de Prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
-# Copiar cliente Prisma generado (necesario para Alpine Linux + Prisma 7.2)
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
+# Copiar node_modules necesarios para Prisma y runtime
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 
 # Copiar y hacer ejecutable el script de bootstrap
 COPY --chown=nextjs:nodejs docker-prisma.sh ./
