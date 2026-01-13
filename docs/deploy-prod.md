@@ -98,8 +98,8 @@ openssl rand -base64 16
 
 **En Linux/macOS:**
 ```bash
-chmod +x deploy/deploy.sh
-./deploy/deploy.sh
+chmod +x deploy/linux/deploy.sh
+./deploy/linux/deploy.sh
 ```
 
 **En Windows:**

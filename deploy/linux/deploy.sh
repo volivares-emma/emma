@@ -76,8 +76,8 @@ else
     fi
 fi
 
-# 3. Configurar directorio de trabajo (estamos en web/)
-cd "$(dirname "$0")/.."
+# 3. Configurar directorio de trabajo (estamos en deploy/linux/)
+cd "$(dirname "$0")/../../"
 PROJECT_ROOT="$(pwd)"
 log "Directorio del proyecto: $PROJECT_ROOT"
 
