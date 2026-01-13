@@ -154,4 +154,7 @@ docker-compose ps
 ```bash
 docker-compose down -v
 docker system prune -a -f
+
+chmod +x deploy/linux/deploy.sh
+./deploy/linux/deploy.sh
 ```

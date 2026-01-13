@@ -112,6 +112,43 @@ npx prisma db seed                      # Desarrollo
 
 ## 🚨 Troubleshooting
 
+**Error: "The datasource.url property is required"**
+
+Asegúrate de que:
+1. El archivo `.env` existe y contiene `DATABASE_URL`
+2. El `docker-compose.yml` está leyendo las variables correctamente
+3. PostgreSQL está corriendo antes de que la aplicación intente conectarse
+
+```bash
+# Verificar que postgres está listo
+docker-compose ps
+
+# Ver logs de postgres
+docker-compose logs postgres
+
+# Reiniciar todo desde cero
+docker-compose down -v
+docker-compose up -d
+```
+
+**Error "database does not exist":**
+
+```bash
+# Verificar variables de entorno
+docker-compose exec webapp env | grep DATABASE
+
+# Ver contenido del .env
+cat .env
+```
+
+Asegúrate de que en `.env`:
+```env
+POSTGRES_USER=emma_user
+POSTGRES_PASSWORD=tu_password_seguro
+POSTGRES_DB=emma_db
+DATABASE_URL=postgresql://emma_user:tu_password_seguro@postgres:5432/emma_db
+```
+
 **Error SSL:**
 ```bash
 # Verificar certificados
