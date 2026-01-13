@@ -168,12 +168,9 @@ for i in {1..10}; do
     sleep 5
 done
 
-# 11. Ejecutar migraciones y seeders
-log "Ejecutando migraciones de base de datos..."
-docker-compose exec -T webapp npx prisma migrate deploy
-
-log "Ejecutando seeders de datos iniciales..."
-docker-compose exec -T webapp sh -c "NODE_ENV=production npx prisma db seed"
+# 11. Esperar a que las migraciones se ejecuten en el contenedor
+log "Las migraciones se ejecutarán automáticamente al iniciar la aplicación..."
+sleep 20
 
 # 12. Verificar aplicación en HTTP
 log "Verificando aplicación en HTTP..."

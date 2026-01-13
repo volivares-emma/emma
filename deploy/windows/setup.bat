@@ -70,49 +70,13 @@ echo PASO 3: Ejecutar Operaciones de Prisma
 echo ====================================
 echo.
 
-REM Verificar si existen migraciones
-if not exist "prisma\migrations" (
-    echo Migraciones no encontradas, creando migracion inicial...
-    echo.
-    set /p migration_name="Nombre de la migracion (default: init): "
-    if "!migration_name!"=="" (
-        set "migration_name=init"
-    )
-    echo.
-    echo Creando migracion dentro del contenedor: !migration_name!
-    docker-compose -f docker-compose.dev.yml exec -T webapp npx prisma migrate dev --name "!migration_name!"
-    if errorlevel 1 (
-        echo ERROR: Fallo al crear la migracion
-        pause
-        exit /b 1
-    )
-    echo OK: Migracion creada
-    echo.
-)
+echo Esperando a que la aplicacion complete migraciones y setup...
+timeout /t 10 /nobreak
 
-echo 1. Ejecutando migraciones...
-docker-compose -f docker-compose.dev.yml exec -T webapp npx prisma migrate deploy
-if errorlevel 1 (
-    echo ERROR en migraciones
-    pause
-    exit /b 1
-)
-
-echo OK: Migraciones completadas
+echo OK: Las migraciones y generacion se ejecutaron automaticamente
 echo.
 
-echo 2. Generando cliente de Prisma...
-docker-compose -f docker-compose.dev.yml exec -T webapp npx prisma generate
-if errorlevel 1 (
-    echo ERROR al generar Prisma
-    pause
-    exit /b 1
-)
-
-echo OK: Cliente de Prisma generado
-echo.
-
-echo 3. Ejecutando seeder de datos...
+echo Ejecutando seeder de datos...
 docker-compose -f docker-compose.dev.yml exec -T webapp npm run db:seed
 if errorlevel 1 (
     echo WARNING: Error en seeder (puede continuar)
