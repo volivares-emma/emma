@@ -102,11 +102,6 @@ chmod +x deploy/linux/deploy.sh
 ./deploy/linux/deploy.sh
 ```
 
-**En Windows:**
-```cmd
-deploy\deploy.bat
-```
-
 ### 4. Verificar Deploy
 ```bash
 # Ver logs en tiempo real

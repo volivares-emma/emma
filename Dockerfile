@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Copiar archivos de dependencias
 COPY package-lock.json package.json ./
-RUN npm ci --prod
+RUN npm ci
 
 # Stage para desarrollo
 FROM base AS development
