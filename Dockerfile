@@ -74,7 +74,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 # Copiar node_modules necesarios para Prisma y runtime
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 
-# Copiar y hacer ejecutable el script de bootstrap
+# Copiar y hacer ejecutable el script de inicio
 COPY --chown=nextjs:nodejs docker-prisma.sh ./
 RUN chmod +x ./docker-prisma.sh
 
