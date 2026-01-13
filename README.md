@@ -148,3 +148,10 @@ docker-compose ps
 ```
 
 **¡EMMA HR Software - Gestión de recursos humanos moderna y eficiente!**
+
+
+### Reinicio
+```bash
+docker-compose down -v
+docker system prune -a -f
+```
