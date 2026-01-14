@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "db:seed": "npx prisma db seed"
+    "db:seed": "npx prisma db seed",
+    "db:deploy": "npx prisma migrate deploy && npx prisma generate",
+    "db:push": "npx prisma db push"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

@@ -82,4 +82,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["./docker-prisma.sh"]
+# Ejecutar migraciones y luego la aplicación
+CMD ["sh", "-c", "npm run db:deploy && npm run start"]

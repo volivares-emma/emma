@@ -1,23 +1,35 @@
 #!/bin/sh
 set -e
 
-echo "Ejecutando migraciones de Prisma..."
+echo "Esperando que PostgreSQL esté disponible..."
 
 if [ -z "$DATABASE_URL" ]; then
     echo "ERROR: DATABASE_URL no está definida"
-    env | grep -i database || true
     exit 1
 fi
 
-echo "Prisma DB URL: ${DATABASE_URL:0:30}..."
+# Extraer host de la DATABASE_URL
+DB_HOST=$(echo "$DATABASE_URL" | sed -E 's/postgresql:\/\/[^:]+:[^@]+@([^:]+).*/\1/')
+DB_PORT=${DB_PORT:-5432}
+DB_USER=${POSTGRES_USER:-emma_user}
+DB_NAME=${POSTGRES_DB:-emma_db}
 
-# Generar cliente Prisma con DATABASE_URL disponible
-npx prisma generate
+# Esperar a que PostgreSQL esté listo (máximo 30 segundos)
+timeout 30 sh -c "until pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME 2>/dev/null; do sleep 2; done" || {
+    echo "ERROR: PostgreSQL no está disponible después de 30 segundos"
+    exit 1
+}
 
-# Ejecutar migraciones
+echo "ostgreSQL está listo"
+echo "Aplicando migraciones de base de datos..."
+
+# Aplicar migraciones (deploy mode - solo aplica, no crea nuevas)
 npx prisma migrate deploy
 
-echo "Migraciones completadas"
-echo "Iniciando aplicación..."
+echo "Generando cliente Prisma..."
+npx prisma generate
+
+echo "Base de datos configurada correctamente"
+echo "Iniciando aplicación EMMA..."
 
 node server.js
