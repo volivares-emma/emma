@@ -39,6 +39,7 @@ COPY . .
 # Variables de entorno de build
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+ENV DATABASE_URL=postgresql://user:password@localhost:5432/db
 
 # Generar cliente Prisma antes del build
 RUN npx prisma generate
