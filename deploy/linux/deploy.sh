@@ -17,6 +17,7 @@ NC='\033[0m'
 SSL_ENABLED=false
 DOMAIN="descubre.emma.pe"
 EMAIL="victor.olivares@emma.pe"
+INCLUDE_WWW=false
 
 # Funciones auxiliares
 log() {
@@ -192,20 +193,24 @@ if [ -f "deploy/nginx/ssl/live/$DOMAIN/fullchain.pem" ]; then
 else
     log "Obteniendo certificados SSL de Let's Encrypt..."
     
+    # Preguntar si incluir www
+    echo -n "¿Incluir subdominio www en el certificado? (s/N): "
+    read -r INCLUDE_WWW_PROMPT
+    if [ "$INCLUDE_WWW_PROMPT" = "s" ] || [ "$INCLUDE_WWW_PROMPT" = "S" ]; then
+        INCLUDE_WWW=true
+    fi
+    
     # Esperar a que certbot esté listo
     sleep 5
     
-    if docker-compose exec -T certbot certbot certonly \
-        --webroot \
-        --webroot-path=/var/www/certbot \
-        --email $EMAIL \
-        --agree-tos \
-        --no-eff-email \
-        --non-interactive \
-        --cert-name $DOMAIN \
-        -d $DOMAIN \
-        -d www.$DOMAIN; then
-        
+    # Construir comando certonly con o sin www
+    CERTBOT_CMD="docker-compose exec -T certbot certbot certonly --webroot --webroot-path=/var/www/certbot --email $EMAIL --agree-tos --no-eff-email --non-interactive --cert-name $DOMAIN -d $DOMAIN"
+    
+    if [ "$INCLUDE_WWW" = true ]; then
+        CERTBOT_CMD="$CERTBOT_CMD -d www.$DOMAIN"
+    fi
+    
+    if eval $CERTBOT_CMD; then
         log "Certificados SSL obtenidos exitosamente"
         SSL_ENABLED=true
     else
