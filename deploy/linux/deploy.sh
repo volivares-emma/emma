@@ -192,7 +192,7 @@ if [ -f "deploy/nginx/ssl/live/$DOMAIN/fullchain.pem" ]; then
 else
     log "Obteniendo certificados SSL de Let's Encrypt..."
     
-    if docker-compose run --rm certbot certonly \
+    if docker-compose exec -T certbot certonly \
         --webroot \
         --webroot-path=/var/www/certbot \
         --email $EMAIL \
