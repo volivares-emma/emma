@@ -2,16 +2,25 @@
 
 # EMMA Docker Bootstrap Script
 # Ejecuta las migraciones de Prisma antes de iniciar la aplicación
-# Variables de entorno del docker-compose.yaml no se pasan a subprocesos
-# Por eso necesitamos pasar DATABASE_URL explícitamente aquí
 
 set -e
 
 echo "Ejecutando migraciones de Prisma..."
-DATABASE_URL="${DATABASE_URL}" npx prisma migrate deploy
+
+# Verificar que DATABASE_URL está disponible
+if [ -z "$DATABASE_URL" ]; then
+    echo "ERROR: DATABASE_URL no está definida"
+    echo "Variables disponibles:"
+    env | grep -i database || echo "No se encontró DATABASE_URL"
+    exit 1
+fi
+
+echo "Database URL: ${DATABASE_URL:0:30}..."
+
+npx prisma migrate deploy
 
 echo "Migraciones completadas"
 echo "Iniciando aplicación..."
 
 # Iniciar la aplicación Node.js
-DATABASE_URL="${DATABASE_URL}" node server.js
+node server.js
