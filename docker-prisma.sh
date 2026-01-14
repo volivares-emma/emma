@@ -1,26 +1,20 @@
 #!/bin/sh
-
-# EMMA Docker Bootstrap Script
-# Ejecuta las migraciones de Prisma antes de iniciar la aplicación
-
 set -e
 
 echo "Ejecutando migraciones de Prisma..."
 
-# Verificar que DATABASE_URL está disponible
-if [ -z "$DATABASE_URL" ]; then
-    echo "ERROR: DATABASE_URL no está definida"
-    echo "Variables disponibles:"
-    env | grep -i database || echo "No se encontró DATABASE_URL"
+# Prisma v7 usa PRISMA_DATABASE_URL
+if [ -z "$PRISMA_DATABASE_URL" ]; then
+    echo "ERROR: PRISMA_DATABASE_URL no está definida"
+    env | grep -i prisma || true
     exit 1
 fi
 
-echo "Database URL: ${DATABASE_URL:0:30}..."
+echo "Prisma DB URL: ${PRISMA_DATABASE_URL:0:30}..."
 
 npx prisma migrate deploy
 
 echo "Migraciones completadas"
 echo "Iniciando aplicación..."
 
-# Iniciar la aplicación Node.js
 node server.js

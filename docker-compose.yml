@@ -39,7 +39,7 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-emma_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-emma_db}
+      - PRISMA_DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXTAUTH_URL=https://descubre.emma.pe
     depends_on:
