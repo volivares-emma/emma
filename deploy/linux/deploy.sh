@@ -149,7 +149,7 @@ docker-compose build webapp
 
 # 9. Iniciar servicios en FASE 1 (HTTP solamente)
 log "FASE 1: Iniciando servicios en modo HTTP..."
-docker-compose up -d postgres webapp nginx
+docker-compose up -d postgres webapp nginx certbot
 
 # 10. Esperar a que los servicios estén listos
 log "Esperando a que los servicios estén operativos..."
@@ -192,13 +192,17 @@ if [ -f "deploy/nginx/ssl/live/$DOMAIN/fullchain.pem" ]; then
 else
     log "Obteniendo certificados SSL de Let's Encrypt..."
     
-    if docker-compose exec -T certbot certonly \
+    # Esperar a que certbot esté listo
+    sleep 5
+    
+    if docker-compose exec -T certbot certbot certonly \
         --webroot \
         --webroot-path=/var/www/certbot \
         --email $EMAIL \
         --agree-tos \
         --no-eff-email \
         --non-interactive \
+        --cert-name $DOMAIN \
         -d $DOMAIN \
         -d www.$DOMAIN; then
         
@@ -209,7 +213,8 @@ else
 - DNS no está configurado correctamente
 - El dominio no apunta a este servidor  
 - Let's Encrypt rate limit alcanzado
-- Firewall bloqueando puerto 80"
+- Firewall bloqueando puerto 80
+- Certbot no puede acceder al webroot"
     fi
 fi
 
