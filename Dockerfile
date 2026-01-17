@@ -1,35 +1,6 @@
 # Dockerfile para EMMA Next.js App
 FROM node:22.12-alpine AS base
 
-# Dependencias base
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-
-# Copiar archivos de dependencias
-COPY package-lock.json package.json ./
-RUN npm ci
-
-# Stage para desarrollo
-FROM base AS development
-WORKDIR /app
-RUN apk add --no-cache libc6-compat
-COPY package-lock.json package.json ./
-RUN npm ci
-
-# Copiar archivo .env si existe
-COPY .env* ./
-
-# Copiar prisma schema
-COPY prisma ./prisma
-
-# Variables de entorno
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=development
-
-EXPOSE 3000
-CMD ["npm", "run", "dev"]
-
 # Rebuild para producción
 FROM base AS builder
 WORKDIR /app
@@ -61,19 +32,15 @@ COPY --from=builder /app/public ./public
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-# Copiar build artifacts
+# Copiar build artifacts (standalone incluye node_modules necesarios)
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copiar archivos de Prisma
+# Copiar archivos de Prisma para migraciones
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
-# Copiar node_modules necesarios para Prisma y runtime
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
-
-# Copiar y hacer ejecutable el script de inicio
-COPY --chown=nextjs:nodejs docker-prisma.sh ./
-RUN chmod +x ./docker-prisma.sh
+# Copiar package.json para scripts db:deploy
+COPY --chown=nextjs:nodejs package.json ./
 
 USER nextjs
 
@@ -82,5 +49,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Ejecutar migraciones y luego la aplicación
-CMD ["sh", "-c", "npm run db:deploy && npm run start"]
+# Ejecutar migraciones y luego la aplicación usando standalone
+CMD ["sh", "-c", "npm run db:deploy && node .next/standalone/server.js"]

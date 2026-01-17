@@ -109,17 +109,11 @@ if [ ! -f ".env" ]; then
     fi
 fi
 
-# Cargar variables de ambiente desde .env
-log "Cargando configuración desde .env..."
+# Cargar variables de ambiente desde .env.prod
+log "Cargando configuración desde .env.prod..."
 set -a
-source .env
+source .env.prod
 set +a
-
-# Construir DATABASE_URL con escape adecuado
-DB_USER="${POSTGRES_USER:-emma_user}"
-DB_PASS="${POSTGRES_PASSWORD}"
-DB_NAME="${POSTGRES_DB:-emma_db}"
-DATABASE_URL="postgresql://${DB_USER}:${DB_PASS}@postgres:5432/${DB_NAME}"
 
 # 5. Crear estructura de directorios
 log "Preparando estructura de directorios..."
