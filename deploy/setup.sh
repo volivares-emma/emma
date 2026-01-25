@@ -146,7 +146,7 @@ log "Construyendo imagen de la aplicación..."
 docker-compose build webapp
 
 # 8. Iniciar servicios en FASE 1 (HTTP solamente)
-log "FASE 1: Iniciando servicios en modo HTTP..."
+log "Iniciando servicios base (nginx, app, db)..."
 docker-compose up -d postgres webapp nginx certbot
 
 # 9. Esperar a que los servicios estén listos
@@ -180,6 +180,23 @@ else
     warn "Aplicación no responde inmediatamente en HTTP"
     log "Continuando con obtención de SSL..."
 fi
+
+# Verificar acceso público al ACME challenge (CRÍTICO)
+log "Verificando acceso al ACME challenge..."
+
+TEST_FILE="$ACME_PATH/test.txt"
+echo "ok" > "$TEST_FILE"
+
+if curl -f "http://$DOMAIN/.well-known/acme-challenge/test.txt" > /dev/null 2>&1; then
+    log "ACME challenge accesible desde Internet"
+else
+    error "ACME challenge NO es accesible.
+Nginx no está sirviendo correctamente el webroot.
+No se puede continuar con Certbot."
+fi
+
+rm -f "$TEST_FILE"
+
 
 # 12. FASE 2: Obtener certificados SSL
 log "FASE 2: Obteniendo certificados SSL..."
