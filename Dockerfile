@@ -38,15 +38,15 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 
-
-USER nextjs
-
 EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Comando para iniciar la aplicación
+# Ejecutar migraciones como root antes de cambiar de usuario
+RUN npx prisma migrate deploy --schema=./prisma/schema.prisma && npx prisma db seed || true
 
-# Command to run the application, waiting for the database to be ready and applying migrations
-CMD ["sh", "-c", "npx prisma migrate deploy --schema=./prisma/schema.prisma && npx prisma db seed && node server.js"]
+USER nextjs
+
+# Comando para iniciar la aplicación
+CMD ["node", "server.js"]
