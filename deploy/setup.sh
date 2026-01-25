@@ -118,19 +118,19 @@ set +a
 # 5. Crear estructura de directorios
 log "Preparando estructura de directorios..."
 mkdir -p deploy/nginx/ssl/live/$DOMAIN
-mkdir -p deploy/nginx/sites-enabled
+mkdir -p deploy/nginx/conf.d
 mkdir -p public/uploads/{blog,user,slide,recruitment}
 mkdir -p backups/postgres
 
 # 6. Configurar nginx para HTTP inicial (Fase 1)
 log "Configurando nginx para HTTP inicial..."
 
-if [ ! -f "deploy/nginx/sites-available/emma-http.conf" ]; then
+if [ ! -f "deploy/nginx/conf.d/emma-http.conf" ]; then
     error "No se encuentra el archivo de configuración HTTP de nginx"
 fi
 
 # Crear symlink para configuración HTTP
-ln -sf $(pwd)/deploy/nginx/sites-available/emma-http.conf deploy/nginx/sites-enabled/emma.conf
+ln -sf $(pwd)/deploy/nginx/conf.d/emma-http.conf deploy/nginx/conf.d/emma.conf
 
 # 7. Validar Docker Compose
 log "Validando configuración de Docker Compose..."
@@ -221,12 +221,12 @@ fi
 if [ "$SSL_ENABLED" = true ]; then
     log "Cambiando a configuración HTTPS..."
     
-    if [ ! -f "deploy/nginx/sites-available/emma-https.conf" ]; then
+    if [ ! -f "deploy/nginx/conf.d/emma-https.conf" ]; then
         error "No se encuentra el archivo de configuración HTTPS de nginx"
     fi
     
     # Cambiar symlink a configuración HTTPS
-    ln -sf $(pwd)/deploy/nginx/sites-available/emma-https.conf deploy/nginx/sites-enabled/emma.conf
+    ln -sf $(pwd)/deploy/nginx/conf.d/emma-https.conf deploy/nginx/conf.d/emma.conf
     
     # Reiniciar nginx con nueva configuración
     log "Reiniciando nginx con SSL..."
