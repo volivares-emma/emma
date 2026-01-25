@@ -18,6 +18,9 @@ SSL_ENABLED=false
 DOMAIN="descubre.emma.pe"
 EMAIL="victor.olivares@emma.pe"
 INCLUDE_WWW=false
+CERTBOT_WEBROOT="certbot_www"
+ACME_PATH="$CERTBOT_WEBROOT/.well-known/acme-challenge"
+
 
 # Funciones auxiliares
 log() {
@@ -121,6 +124,16 @@ mkdir -p deploy/nginx/ssl/live/$DOMAIN
 mkdir -p deploy/nginx/conf.d
 mkdir -p public/uploads/{blog,user,slide,recruitment}
 mkdir -p backups/postgres
+
+# Directorio ACME para Certbot (CRÍTICO)
+mkdir -p "$ACME_PATH"
+
+# Validación explícita (anti-sustos)
+if [ ! -d "$ACME_PATH" ]; then
+    error "No se pudo crear el directorio ACME: $ACME_PATH"
+fi
+
+log "Directorio ACME preparado: $ACME_PATH"
 
 # 6. Configurar nginx para HTTP inicial (Fase 1)
 log "Configurando nginx para HTTP inicial..."

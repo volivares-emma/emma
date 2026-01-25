@@ -55,6 +55,8 @@ services:
     image: nginx:alpine
     container_name: emma_nginx
     restart: unless-stopped
+    command: >
+      /bin/sh -c "rm -f /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     ports:
       - "80:80"
       - "443:443"
