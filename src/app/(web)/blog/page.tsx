@@ -129,7 +129,7 @@ export default function BlogPage() {
           <section className="max-w-7xl mx-auto mb-16">
             <div className="grid lg:grid-cols-2 gap-6">
               <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-                <div className="aspect-[16/9] w-full bg-gray-200 animate-pulse" />
+                <div className="aspect-videos w-full bg-gray-200 animate-pulse" />
                 <div className="p-6 space-y-3">
                   <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
                   <div className="h-6 w-3/4 bg-gray-200 rounded animate-pulse" />
@@ -161,15 +161,15 @@ export default function BlogPage() {
 
         {/* FEATURED BLOG - Imagen izquierda, contenido derecha */}
         {!loading && featured && (
-          <section className="bg-white mb-16">
+          <section className="mb-16">
             <div className="max-w-7xl mx-auto">
               <a
                 href={`/blog/${featured.slug}/`}
                 className="group block overflow-hidden rounded-3xl bg-white shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 border border-gray-100"
               >
-                <article className="grid items-center gap-0 lg:grid-cols-2 min-h-[400px]">
+                <article className="grid items-center gap-0 lg:grid-cols-2 min-h-100">
                   {/* Imagen del blog destacado - Lado izquierdo */}
-                  <div className="relative h-full min-h-[400px]">
+                  <div className="relative h-full min-h-100">
                     {featured.files && featured.files.length > 0 ? (
                       <div className="h-full w-full overflow-hidden rounded-l-3xl relative">
                         <Image
@@ -302,7 +302,7 @@ export default function BlogPage() {
                     {/* Imagen del blog */}
                     <div className="relative overflow-hidden">
                       {blog.files && blog.files.length > 0 ? (
-                        <div className="aspect-[16/9] w-full overflow-hidden relative">
+                        <div className="aspect-video w-full overflow-hidden relative">
                           <Image
                             src={blog.files[0].path}
                             alt={blog.title}
@@ -328,7 +328,7 @@ export default function BlogPage() {
                           <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </div>
                       ) : (
-                        <div className="aspect-[16/9] w-full bg-linear-to-br from-[#035AA6]/5 via-[#11B4D9]/5 to-[#07598C]/5 flex items-center justify-center relative overflow-hidden">
+                        <div className="aspect-video w-full bg-linear-to-br from-[#035AA6]/5 via-[#11B4D9]/5 to-[#07598C]/5 flex items-center justify-center relative overflow-hidden">
                           <div className="absolute inset-0 opacity-30">
                             <div className="w-full h-full bg-linear-to-br from-[#035AA6]/10 to-[#11B4D9]/10" 
                                  style={{
@@ -359,7 +359,7 @@ export default function BlogPage() {
                       </div>
 
                       {/* Título */}
-                      <h3 className="text-xl font-bold leading-tight text-gray-900 transition-colors group-hover:text-[#035AA6] line-clamp-2 flex-grow">
+                      <h3 className="text-xl font-bold leading-tight text-gray-900 transition-colors group-hover:text-[#035AA6] line-clamp-2 grow">
                         {blog.title}
                       </h3>
 
@@ -434,7 +434,7 @@ export default function BlogPage() {
                     />
                     <button
                       type="submit"
-                      className="sm:flex-shrink-0 sm:w-auto w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-8 py-4 text-lg font-semibold text-[#035AA6] hover:bg-gray-50 transition-colors shadow-lg whitespace-nowrap"
+                      className="sm:shrink-0 sm:w-auto w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-8 py-4 text-lg font-semibold text-[#035AA6] hover:bg-gray-50 transition-colors shadow-lg whitespace-nowrap"
                     >
                       Suscribirme gratis
                       <ArrowRight className="h-5 w-5" />

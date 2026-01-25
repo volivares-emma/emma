@@ -28,8 +28,8 @@ git clone https://github.com/tu-usuario/emma.git
 cd emma/web
 
 # Configurar ambiente
-cp .env.example .env.prod
-nano .env.prod  # Editar si es necesario
+cp .env.example .env
+nano .env  # Editar si es necesario
 
 # Iniciar servicios
 docker-compose up -d
@@ -40,9 +40,9 @@ docker-compose logs -f
 
 ### Producción (Linux)
 ```bash
-# Desde directorio web/
-chmod +x deploy/linux/setup.sh
-./deploy/linux/setup.sh
+# Desde directorio emma/
+chmod +x deploy/setup.sh
+./deploy/setup.sh
 ```
 
 ---
@@ -144,14 +144,17 @@ nslookup www.descubre.emma.pe
 
 ## 📋 Variables de Entorno
 
-### Crear archivo .env.prod
+### Crear archivo .env
 ```bash
-cp .env.example .env.prod
-nano .env.prod
+cp .env.example .env
+nano .env
 ```
 
 ### Variables Obligatorias
 ```env
+# Ambiente
+NODE_ENV=production
+
 # Base de datos - ¡CAMBIA ESTAS CREDENCIALES!
 POSTGRES_USER=emma_user
 POSTGRES_PASSWORD=tu_password_super_seguro_aqui
@@ -163,9 +166,6 @@ NEXTAUTH_URL=https://descubre.emma.pe
 
 # URL de base de datos
 DATABASE_URL=postgresql://emma_user:tu_password_super_seguro_aqui@postgres:5432/emma_db
-
-# Ambiente
-NODE_ENV=production
 ```
 
 ### Generar Secrets Seguros
@@ -187,8 +187,8 @@ El script `setup.sh` automatiza todo el proceso:
 
 ```bash
 # Desde web/
-chmod +x deploy/linux/setup.sh
-./deploy/linux/setup.sh
+chmod +x deploy/setup.sh
+./deploy/setup.sh
 ```
 
 **El script realiza:**
@@ -496,8 +496,8 @@ docker-compose restart postgres
 
 #### 2. Error: "The datasource.url property is required"
 ```bash
-# Asegurar que .env.prod existe y tiene DATABASE_URL
-cat .env.prod | grep DATABASE_URL
+# Asegurar que .env existe y tiene DATABASE_URL
+cat .env | grep DATABASE_URL
 
 # Verificar que docker-compose carga las variables
 docker-compose exec webapp env | grep DATABASE

@@ -2,7 +2,7 @@
 
 # EMMA Deploy Script (Estructura Interna)
 # Deploy automático con estrategia de dos fases para SSL
-# Ubicación: web/deploy/deploy.sh
+# Ubicación: emma/deploy/setup.sh
 
 set -e
 
@@ -77,14 +77,14 @@ else
     fi
 fi
 
-# 3. Configurar directorio de trabajo (estamos en deploy/linux/)
-cd "$(dirname "$0")/../../"
+# 3. Configurar directorio de trabajo
+cd "$(dirname "$0")/.."
 PROJECT_ROOT="$(pwd)"
 log "Directorio del proyecto: $PROJECT_ROOT"
 
 # Verificar que estamos en el directorio correcto
 if [ ! -f "package.json" ] || [ ! -f "docker-compose.yml" ]; then
-    error "No se encuentra package.json o docker-compose.yml. Verifica que estés en el directorio web/"
+    error "No se encuentra package.json o docker-compose.yml. Verifica que estés en el directorio emma/"
 fi
 
 # 4. Verificar archivo .env
@@ -109,10 +109,10 @@ if [ ! -f ".env" ]; then
     fi
 fi
 
-# Cargar variables de ambiente desde .env.prod
-log "Cargando configuración desde .env.prod..."
+# Cargar variables de ambiente desde .env
+log "Cargando configuración desde .env..."
 set -a
-source .env.prod
+source .env
 set +a
 
 # 5. Crear estructura de directorios
@@ -130,7 +130,7 @@ if [ ! -f "deploy/nginx/sites-available/emma-http.conf" ]; then
 fi
 
 # Crear symlink para configuración HTTP
-ln -sf /etc/nginx/sites-available/emma-http.conf deploy/nginx/sites-enabled/emma.conf
+ln -sf $(pwd)/deploy/nginx/sites-available/emma-http.conf deploy/nginx/sites-enabled/emma.conf
 
 # 7. Validar Docker Compose
 log "Validando configuración de Docker Compose..."
@@ -226,7 +226,7 @@ if [ "$SSL_ENABLED" = true ]; then
     fi
     
     # Cambiar symlink a configuración HTTPS
-    ln -sf /etc/nginx/sites-available/emma-https.conf deploy/nginx/sites-enabled/emma.conf
+    ln -sf $(pwd)/deploy/nginx/sites-available/emma-https.conf deploy/nginx/sites-enabled/emma.conf
     
     # Reiniciar nginx con nueva configuración
     log "Reiniciando nginx con SSL..."

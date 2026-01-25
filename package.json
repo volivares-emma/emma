@@ -5,10 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start",
-    "db:seed": "npx prisma db seed",
-    "db:deploy": "npx prisma migrate deploy && npx prisma generate",
-    "db:push": "npx prisma db push"
+    "start": "next start"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -62,7 +59,7 @@
     "@types/pg": "^8.16.0",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
-    "prisma": "^7.2.0",
+    "prisma": "^7.3.0",
     "tailwindcss": "^4.1.18",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",

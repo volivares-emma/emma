@@ -2,7 +2,7 @@
 
 # EMMA Maintenance Script (Estructura Interna)
 # Utilidades para el mantenimiento de la aplicación en producción
-# Ubicación: web/deploy/maintenance.sh
+# Ubicación: emma/deploy/maintenance.sh
 
 set -e
 
@@ -45,11 +45,11 @@ check_docker() {
         error "Docker daemon no está corriendo"
     fi
     
-    # Moverse al directorio web
+    # Moverse al directorio emma
     cd "$(dirname "$0")/.."
     
     if [ ! -f "package.json" ] || [ ! -f "docker-compose.yml" ]; then
-        error "No se encuentra package.json o docker-compose.yml. Ejecuta desde web/"
+        error "No se encuentra package.json o docker-compose.yml. Ejecuta desde emma/"
     fi
 }
 
@@ -121,7 +121,7 @@ update_app() {
     log "Creando backup automático antes de la actualización..."
     backup_database
     
-    # Obtener últimos cambios (desde web/)
+    # Obtener últimos cambios (desde emma/)
     log "Obteniendo últimos cambios del repositorio..."
     git fetch origin
     git pull origin main

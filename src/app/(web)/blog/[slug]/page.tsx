@@ -8,8 +8,7 @@ import {
   Calendar, 
   User, 
   Share2, 
-  Mail, 
-  Clock,
+  Mail,
   ArrowRight,
   Zap,
   BookOpen 

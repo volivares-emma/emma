@@ -1,15 +1,18 @@
 # Dockerfile para EMMA Next.js App
 FROM node:22.12-alpine AS base
 
+# Instalar dependencias
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+
 # Rebuild para producción
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Variables de entorno de build
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=production
 
 # Build de la aplicación
 RUN npm run build
@@ -28,19 +31,10 @@ RUN adduser --system --uid 1001 nextjs
 # Copiar archivos necesarios
 COPY --from=builder /app/public ./public
 
-# Configurar permisos para archivos estáticos
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
 # Copiar build artifacts (standalone incluye node_modules necesarios)
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copiar archivos de Prisma para migraciones
-COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
-
-# Copiar package.json para scripts db:deploy
-COPY --chown=nextjs:nodejs package.json ./
 
 USER nextjs
 
@@ -49,5 +43,7 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Ejecutar migraciones y luego la aplicación usando standalone
-CMD ["sh", "-c", "npm run db:deploy && node .next/standalone/server.js"]
+# Comando para iniciar la aplicación
+
+# Command to run the application, waiting for the database to be ready and applying migrations
+CMD ["sh", "-c", "npx prisma migrate deploy --schema=./prisma/schema.prisma && npx prisma db seed && node server.js"]

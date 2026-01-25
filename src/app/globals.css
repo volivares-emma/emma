@@ -48,118 +48,123 @@
   --radius: 0.625rem;
   /* 10px */
   /* ===== Core Surface & Text ===== */
-  --background: #ffffff;
-  --foreground: #0D0D0D;
-  /* EMMA Deep black */
+  --background: #F2F2F2;
+  --foreground: #03178C;
+  /* EMMA Deep blue */
   --card: #ffffff;
-  --card-foreground: #0D0D0D;
+  --card-foreground: #03178C;
   --popover: #ffffff;
-  --popover-foreground: #0D0D0D;
+  --popover-foreground: #03178C;
   /* ===== Brand Primaries ===== */
-  --primary: #035AA6;
-  /* EMMA main blue */
+  --primary: #03178C;
+  /* EMMA main deep blue */
   --primary-foreground: #ffffff;
   /* text on primary */
   /* ===== Secondary / Muted / Accent ===== */
   /* Use light brand-tinted surfaces for subtle sections */
-  --secondary: #F0F7FC;
-  /* light brand tint */
-  --secondary-foreground: #07598C;
+  --secondary: #2651A6;
   /* medium blue */
-  --muted: #F6FAFD;
+  --secondary-foreground: #ffffff;
+  /* light text */
+  --muted: #F2F2F2;
   /* very soft tint */
-  --muted-foreground: #07598C;
-  --accent: #E9F7FB;
-  /* accent surface */
-  --accent-foreground: #07598C;
+  --muted-foreground: #2651A6;
+  --accent: #B2D95F;
+  /* green accent */
+  --accent-foreground: #03178C;
   /* ===== Feedback ===== */
   --destructive: #DC2626;
   /* red */
   --destructive-foreground: #ffffff;
   /* ===== Borders / Inputs / Focus ===== */
-  --border: rgba(17, 180, 217, 0.20);
-  /* #11B4D9/20 */
-  --input: rgba(17, 180, 217, 0.20);
-  --ring: #11B4D9;
-  /* focus ring */
+  --border: rgba(3, 23, 140, 0.15);
+  /* #03178C/15 */
+  --input: rgba(3, 23, 140, 0.10);
+  --ring: #157EBF;
+  /* focus ring light blue */
   /* ===== Charts (brand-driven palette) ===== */
-  --chart-1: #035AA6;
-  /* primary */
-  --chart-2: #11B4D9;
-  /* light blue */
-  --chart-3: #038C7F;
-  /* teal */
-  --chart-4: #07598C;
+  --chart-1: #03178C;
+  /* primary dark blue */
+  --chart-2: #2651A6;
   /* medium blue */
-  --chart-5: #0D0D0D;
-  /* deep black */
+  --chart-3: #157EBF;
+  /* light blue */
+  --chart-4: #B2D95F;
+  /* green accent */
+  --chart-5: #F2F2F2;
+  /* light gray */
   /* ===== Sidebar (shadcn/ui sidebar-07) ===== */
   /* Solid defaults; components can override to gradient if desired */
-  --sidebar: #035AA6;
-  /* base bg */
+  --sidebar: #03178C;
+  /* base bg deep blue */
   --sidebar-foreground: #ffffff;
   /* text/icons */
-  --sidebar-primary: #035AA6;
-  /* selected item pillar */
+  --sidebar-primary: #2651A6;
+  /* selected item medium blue */
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: rgba(17, 180, 217, 0.14);
-  /* hover/tint */
+  --sidebar-accent: rgba(21, 126, 191, 0.14);
+  /* light blue hover/tint */
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(17, 180, 217, 0.20);
-  --sidebar-ring: #11B4D9;
+  --sidebar-border: rgba(3, 23, 140, 0.15);
+  --sidebar-ring: #157EBF;
 }
 
 /* ===================== */
 /* Dark Theme (EMMA Dark) */
 /* ===================== */
 .dark {
-  --background: #0D0D0D;
-  /* deep black */
-  --foreground: #ffffff;
-  --card: #101418;
-  /* near-black */
-  --card-foreground: #ffffff;
-  --popover: #11161b;
-  --popover-foreground: #ffffff;
-  --primary: #11B4D9;
-  /* brighter on dark */
-  --primary-foreground: #0D0D0D;
-  --secondary: #0F2133;
-  /* deep navy tint */
-  --secondary-foreground: #E6F6FC;
-  /* light */
-  --muted: #0E1B29;
-  /* softer panel */
-  --muted-foreground: #A4D7E6;
-  /* soft blue text */
-  --accent: #123251;
-  /* accent surface */
-  --accent-foreground: #E6F6FC;
-  --destructive: #F05252;
-  --destructive-foreground: #0D0D0D;
-  --border: rgba(255, 255, 255, 0.10);
-  --input: rgba(255, 255, 255, 0.15);
-  --ring: #11B4D9;
-  --chart-1: #11B4D9;
-  /* light blue */
-  --chart-2: #038C7F;
-  /* teal */
-  --chart-3: #75C8E0;
-  /* soft blue */
-  --chart-4: #07598C;
+  --background: #03178C;
+  /* deep blue */
+  --foreground: #F2F2F2;
+  /* light gray */
+  --card: #1a2d6b;
+  /* darker blue */
+  --card-foreground: #F2F2F2;
+  --popover: #2651A6;
   /* medium blue */
-  --chart-5: #7AA5C4;
-  /* muted */
+  --popover-foreground: #F2F2F2;
+  --primary: #157EBF;
+  /* light blue on dark */
+  --primary-foreground: #03178C;
+  --secondary: #2651A6;
+  /* medium blue */
+  --secondary-foreground: #F2F2F2;
+  /* light */
+  --muted: #1a2d6b;
+  /* softer panel */
+  --muted-foreground: #B2D95F;
+  /* green accent text */
+  --accent: #B2D95F;
+  /* green accent */
+  --accent-foreground: #03178C;
+  --destructive: #F05252;
+  --destructive-foreground: #F2F2F2;
+  --border: rgba(245, 242, 242, 0.10);
+  --input: rgba(245, 242, 242, 0.15);
+  --ring: #157EBF;
+  /* light blue ring */
+  --chart-1: #157EBF;
+  /* light blue */
+  --chart-2: #B2D95F;
+  /* green */
+  --chart-3: #2651A6;
+  /* medium blue */
+  --chart-4: #F2F2F2;
+  /* light gray */
+  --chart-5: #157EBF;
+  /* light blue */
   /* Sidebar dark */
-  --sidebar: #0B2D4A;
-  /* darkened primary */
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #11B4D9;
-  --sidebar-primary-foreground: #0D0D0D;
-  --sidebar-accent: rgba(17, 180, 217, 0.14);
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(255, 255, 255, 0.10);
-  --sidebar-ring: #11B4D9;
+  --sidebar: #03178C;
+  /* deep blue */
+  --sidebar-foreground: #F2F2F2;
+  --sidebar-primary: #157EBF;
+  /* light blue selected */
+  --sidebar-primary-foreground: #03178C;
+  --sidebar-accent: rgba(178, 217, 95, 0.14);
+  /* green accent hover */
+  --sidebar-accent-foreground: #F2F2F2;
+  --sidebar-border: rgba(245, 242, 242, 0.10);
+  --sidebar-ring: #157EBF;
 }
 
 @layer base {

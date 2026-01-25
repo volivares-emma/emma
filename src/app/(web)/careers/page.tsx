@@ -344,7 +344,7 @@ export default function CareersPage() {
               </h2>
               <div className="space-y-6">
                 <div className="flex items-start">
-                  <div className="w-14 h-14 bg-linear-to-br from-[#038C7F] to-[#11B4D9] rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                  <div className="w-14 h-14 bg-linear-to-br from-[#038C7F] to-[#11B4D9] rounded-xl flex items-center justify-center mr-4 shrink-0 shadow-lg">
                     <Rocket className="text-white h-6 w-6" />
                   </div>
                   <div>
@@ -358,7 +358,7 @@ export default function CareersPage() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="w-14 h-14 bg-linear-to-br from-[#035AA6] to-[#07598C] rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                  <div className="w-14 h-14 bg-linear-to-br from-[#035AA6] to-[#07598C] rounded-xl flex items-center justify-center mr-4 shrink-0 shadow-lg">
                     <GraduationCap className="text-white h-6 w-6" />
                   </div>
                   <div>
@@ -371,7 +371,7 @@ export default function CareersPage() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="w-14 h-14 bg-linear-to-br from-[#07598C] to-[#11B4D9] rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                  <div className="w-14 h-14 bg-linear-to-br from-[#07598C] to-[#11B4D9] rounded-xl flex items-center justify-center mr-4 shrink-0 shadow-lg">
                     <Heart className="text-white h-6 w-6" />
                   </div>
                   <div>
@@ -384,7 +384,7 @@ export default function CareersPage() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="w-14 h-14 bg-linear-to-br from-[#11B4D9] to-[#038C7F] rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                  <div className="w-14 h-14 bg-linear-to-br from-[#11B4D9] to-[#038C7F] rounded-xl flex items-center justify-center mr-4 shrink-0 shadow-lg">
                     <Scale className="text-white h-6 w-6" />
                   </div>
                   <div>

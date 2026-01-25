@@ -36,8 +36,8 @@ services:
           memory: 2G
     container_name: emma_webapp
     restart: unless-stopped
-    env_file:
-      - .env
+    environment:
+      - NODE_ENV=production
     depends_on:
       postgres:
         condition: service_healthy
@@ -45,6 +45,8 @@ services:
       - emma_network
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     volumes:
       - ./public/uploads:/app/public/uploads
 

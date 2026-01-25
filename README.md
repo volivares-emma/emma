@@ -10,8 +10,8 @@ Sistema completo de gestión de recursos humanos construido con Next.js, TypeScr
 npm install
 
 # 2. Configurar base de datos (requiere PostgreSQL local)
-cp .env.example .env.local
-# Editar DATABASE_URL en .env.local
+cp .env.example .env
+# Editar DATABASE_URL en .env
 
 # 3. Configurar Prisma
 npx prisma generate
@@ -24,30 +24,15 @@ npm run dev
 
 Acceder en: http://localhost:3000
 
-### Opción 2: Desarrollo con Docker (Recomendado)
-```bash
-# 1. Configurar ambiente
-cp .env.example .env.prod
-nano .env.prod  # Editar si es necesario
-
-# 2. Iniciar servicios (postgres + webapp)
-docker-compose -f docker-compose.dev.yml up -d
-
-# 3. Verificar logs
-docker-compose -f docker-compose.dev.yml logs -f
-```
-
-Acceder en: http://localhost:3000
-
-### Opción 3: Producción con Deploy
+### Opción 2: Producción con Deploy
 ```bash
 # 1. Configurar variables de entorno
-cp .env.example .env.prod
-nano .env.prod  # Editar credenciales OBLIGATORIAS
+cp .env.example .env
+nano .env  # Editar credenciales OBLIGATORIAS
 
 # 2. Ejecutar setup automático (Linux)
-chmod +x deploy/linux/setup.sh
-./deploy/linux/setup.sh
+chmod +x deploy/setup.sh
+./deploy/setup.sh
 
 # 3. Verificar
 curl https://descubre.emma.pe
@@ -68,17 +53,6 @@ Acceder en: https://descubre.emma.pe (con SSL)
 ---
 
 ## 🐳 Docker Compose
-
-### Desarrollo (Sin SSL, sin Nginx)
-```bash
-# Usar: docker-compose.dev.yml
-docker-compose -f docker-compose.dev.yml up -d
-
-# Servicios incluidos:
-# - PostgreSQL (puerto 5432)
-# - Next.js (puerto 3000)
-# - Hot reload habilitado
-```
 
 ### Producción (Con SSL, con Nginx)
 ```bash
@@ -124,7 +98,6 @@ npm run db:push      # Sincronizar schema
 npm run db:deploy    # Aplicar migraciones (producción)
 
 # Docker
-docker-compose -f docker-compose.dev.yml up -d       # Desarrollo
 docker-compose up -d                                 # Producción
 ```
 
@@ -236,28 +209,15 @@ docker system prune -a
 
 ---
 
-## 📚 Documentación Completa
-
-Ver [SETUP.md](./SETUP.md) para:
-- Configuración detallada del servidor
-- Setup manual paso a paso
-- Configuración SSL (Let's Encrypt)
-- Troubleshooting completo
-- Backup y restauración
-- Monitoreo avanzado (Prometheus + Grafana)
-
----
-
 ## 🚨 Troubleshooting Rápido
 
 ### Error: "database does not exist"
 ```bash
 # Verificar archivo .env o .env.prod existe
-cat .env.prod | grep DATABASE_URL
+cat .env | grep DATABASE_URL
 
 # Reiniciar desde cero
 docker-compose down -v
-docker-compose -f docker-compose.dev.yml up -d
 ```
 
 ### Error: "Can't connect to PostgreSQL"
@@ -274,48 +234,21 @@ docker-compose restart postgres
 
 ### Error: "The datasource.url property is required"
 ```bash
-# Asegurar que existe .env.prod con DATABASE_URL
-ls -la .env.prod
-
-# O para desarrollo
-ls -la .env.local
+# Asegurar que existe .env con DATABASE_URL
+ls -la .env
 ```
 
----
-
-## 📊 Estructura del Proyecto
-
-```
-web/
-├── src/
-│   ├── app/              # Next.js App Router
-│   ├── components/       # React components
-│   ├── lib/             # Utilidades
-│   ├── types/           # TypeScript types
-│   └── utils/           # Helpers
-├── prisma/
-│   ├── schema.prisma    # Schema de BD
-│   ├── seed.ts          # Data inicial
-│   └── migrations/      # Historial de cambios
-├── deploy/              # Scripts de deployment
-├── public/              # Archivos estáticos
-├── Dockerfile           # Imagen Docker
-├── docker-compose.yml       # Producción
-├── docker-compose.dev.yml   # Desarrollo
-├── SETUP.md             # Guía de setup
-└── README.md            # Este archivo
-```
 
 ---
 
 **¡EMMA HR Software - Gestión de recursos humanos moderna y eficiente!** 🚀
 
 
-### Reinicio
+### Reinicio desde cero
 ```bash
 docker-compose down -v
 docker system prune -a -f
 
-chmod +x deploy/linux/deploy.sh
-./deploy/linux/deploy.sh
+chmod +x deploy/deploy.sh
+./deploy/deploy.sh
 ```
