@@ -249,6 +249,6 @@ ls -la .env
 docker-compose down -v
 docker system prune -a -f
 
-chmod +x deploy/deploy.sh
-./deploy/deploy.sh
+chmod +x deploy/setup.sh
+./deploy/setup.sh
 ```
