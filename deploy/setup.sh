@@ -135,31 +135,21 @@ fi
 
 log "Directorio ACME preparado: $ACME_PATH"
 
-# 6. Configurar nginx para HTTP inicial (Fase 1)
-log "Configurando nginx para HTTP inicial..."
-
-if [ ! -f "deploy/nginx/conf.d/emma-http.conf" ]; then
-    error "No se encuentra el archivo de configuración HTTP de nginx"
-fi
-
-# Crear symlink para configuración HTTP
-ln -sf $(pwd)/deploy/nginx/conf.d/emma-http.conf deploy/nginx/conf.d/emma.conf
-
-# 7. Validar Docker Compose
+# 6. Validar Docker Compose
 log "Validando configuración de Docker Compose..."
 if ! docker-compose config > /dev/null 2>&1; then
     error "Error en docker-compose.yml. Verifica la sintaxis."
 fi
 
-# 8. Construir imágenes
+# 7. Construir imágenes
 log "Construyendo imagen de la aplicación..."
 docker-compose build webapp
 
-# 9. Iniciar servicios en FASE 1 (HTTP solamente)
+# 8. Iniciar servicios en FASE 1 (HTTP solamente)
 log "FASE 1: Iniciando servicios en modo HTTP..."
 docker-compose up -d postgres webapp nginx certbot
 
-# 10. Esperar a que los servicios estén listos
+# 9. Esperar a que los servicios estén listos
 log "Esperando a que los servicios estén operativos..."
 sleep 30
 
@@ -176,11 +166,11 @@ for i in {1..10}; do
     sleep 5
 done
 
-# 11. Esperar a que las migraciones se ejecuten en el contenedor
+# 10. Esperar a que las migraciones se ejecuten en el contenedor
 log "Las migraciones se ejecutarán automáticamente al iniciar la aplicación..."
 sleep 20
 
-# 12. Verificar aplicación en HTTP
+# 11. Verificar aplicación en HTTP
 log "Verificando aplicación en HTTP..."
 if curl -f "http://$DOMAIN/health" > /dev/null 2>&1; then
     log "Aplicación respondiendo correctamente en HTTP"
@@ -191,7 +181,7 @@ else
     log "Continuando con obtención de SSL..."
 fi
 
-# 13. FASE 2: Obtener certificados SSL
+# 12. FASE 2: Obtener certificados SSL
 log "FASE 2: Obteniendo certificados SSL..."
 
 if [ -f "deploy/nginx/ssl/live/$DOMAIN/fullchain.pem" ]; then
@@ -230,30 +220,7 @@ else
     fi
 fi
 
-# 14. Cambiar a configuración HTTPS
-if [ "$SSL_ENABLED" = true ]; then
-    log "Cambiando a configuración HTTPS..."
-    
-    if [ ! -f "deploy/nginx/conf.d/emma-https.conf" ]; then
-        error "No se encuentra el archivo de configuración HTTPS de nginx"
-    fi
-    
-    # Cambiar symlink a configuración HTTPS
-    ln -sf $(pwd)/deploy/nginx/conf.d/emma-https.conf deploy/nginx/conf.d/emma.conf
-    
-    # Reiniciar nginx con nueva configuración
-    log "Reiniciando nginx con SSL..."
-    docker-compose restart nginx
-    
-    # Iniciar renovación automática de certificados
-    log "Iniciando servicio de renovación automática..."
-    docker-compose up -d certbot
-    
-    # Esperar un momento para que nginx reinicie
-    sleep 10
-fi
-
-# 15. Verificación final
+# 13. Verificación final
 log "Verificando deploy final..."
 
 # Verificar servicios
@@ -286,7 +253,7 @@ if [ "$SSL_ENABLED" = true ]; then
     fi
 fi
 
-# 16. Resultado final
+# 14. Resultado final
 echo ""
 echo -e "${GREEN}╔═══════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║             DEPLOY EXITOSO            ║${NC}"
