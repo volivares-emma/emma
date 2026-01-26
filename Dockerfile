@@ -1,51 +1,73 @@
-FROM node:20-bookworm-slim AS base
+FROM node:20.10-alpine AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# =====================
-# Dependencias
-# =====================
-FROM base AS deps
-COPY package.json package-lock.json ./
+# Install dependencies based on the preferred package manager
+COPY package.json package-lock.json* ./
 RUN npm ci
 
-# =====================
-# Builder
-# =====================
-FROM base AS builder
+FROM base AS dev
+
+WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV NEXT_TELEMETRY_DISABLED=1
-
+# Uncomment this if you're using prisma, generates prisma files for linting
 RUN npx prisma generate
+
+#Enables Hot Reloading Check https://github.com/vercel/next.js/issues/36774 for more information
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /root/.npm /root/.npm
+COPY . .
+
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Uncomment this if you're using prisma, generates prisma files for linting
+RUN npx prisma generate
+
 RUN npm run build
 
-# =====================
-# Runner (Producción)
-# =====================
+# Production image, copy all the files and run next
 FROM base AS runner
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
+WORKDIR /app
 
-# Usuario no-root
-RUN groupadd -g 1001 nodejs \
- && useradd -u 1001 -g nodejs nextjs
+ENV NEXT_TELEMETRY_DISABLED 1
 
-# Copiar app
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/prisma ./prisma
 
-# CRÍTICO PARA PRISMA
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
 
-RUN chown -R nextjs:nodejs /app
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Uncomment this if you're using prisma, copies prisma files for linting
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
 USER nextjs
 
 EXPOSE 3000
-ENV PORT=3000
-ENV HOSTNAME=0.0.0.0
 
+ENV PORT 3000
+# set hostname to localhost
+ENV HOSTNAME "0.0.0.0"
+
+# server.js is created by next build from the standalone output
+# https://nextjs.org/docs/pages/api-reference/next-config-js/output
 CMD ["npm", "run", "start:migrate:prod"]
