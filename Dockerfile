@@ -14,6 +14,19 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+FROM base AS dev
+
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Generar cliente de Prisma
+RUN npx prisma generate
+
+#Enables Hot Reloading Check https://github.com/vercel/next.js/issues/36774 for more information
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+
 # Build de la aplicación
 RUN npm run build
 
@@ -31,22 +44,21 @@ RUN adduser --system --uid 1001 nextjs
 # Copiar archivos necesarios
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/.env ./.env
 
 # Copiar build artifacts (standalone incluye node_modules necesarios)
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
+USER nextjs
 
 EXPOSE 3000
 
 ENV PORT=3000
+# set hostname to localhost
 ENV HOSTNAME="0.0.0.0"
 
-# Ejecutar migraciones como root antes de cambiar de usuario
-RUN npx prisma migrate deploy --schema=./prisma/schema.prisma && npx prisma db seed || true
-
-USER nextjs
 
 # Comando para iniciar la aplicación
-CMD ["node", "server.js"]
+CMD ["npm", "run", "start:migrate:prod"]

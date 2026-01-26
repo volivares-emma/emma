@@ -24,21 +24,19 @@ npm run dev
 
 Acceder en: http://localhost:3000
 
-### Opción 2: Producción con Deploy
+### Opción 2: Producción con Docker
 ```bash
 # 1. Configurar variables de entorno
 cp .env.example .env
-nano .env  # Editar credenciales OBLIGATORIAS
+nano .env  # Editar credenciales
 
-# 2. Ejecutar setup automático (Linux)
-chmod +x deploy/setup.sh
-./deploy/setup.sh
-
-# 3. Verificar
-curl https://descubre.emma.pe
+# 2. Iniciar servicios
+docker-compose up -d
 ```
 
-Acceder en: https://descubre.emma.pe (con SSL)
+Acceder en: http://localhost:3000
+
+**Usuario inicial:** admin / Password123$
 
 ---
 

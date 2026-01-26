@@ -130,10 +130,6 @@ update_app() {
     log "Reconstruyendo imagen de la aplicación..."
     docker-compose build webapp
     
-    # Aplicar migraciones de base de datos
-    log "Aplicando migraciones de base de datos..."
-    docker-compose run --rm webapp npx prisma migrate deploy
-    
     # Reiniciar aplicación
     log "Reiniciando aplicación..."
     docker-compose up -d webapp
@@ -337,12 +333,6 @@ reset_app() {
     
     log "Esperando a que los servicios estén listos..."
     sleep 30
-    
-    log "Aplicando migraciones..."
-    docker-compose exec webapp npx prisma migrate deploy
-    
-    log "Ejecutando seeders..."
-    docker-compose exec webapp npm run seed
     
     log "Reset completado - aplicación recreada desde cero"
 }
