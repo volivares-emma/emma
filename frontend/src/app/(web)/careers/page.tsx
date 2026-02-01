@@ -136,15 +136,15 @@ export default function CareersPage() {
     
     // Construir el payload según RecruitmentCreatePayload
     const payload: RecruitmentCreatePayload = {
-      name: String(formData.get("nombre") || ""),
+      full_name: String(formData.get("nombre") || ""),
       email: String(formData.get("email") || ""),
       phone: String(formData.get("telefono") || ""),
       position: positionName,
       experience: String(formData.get("experiencia") || ""),
-      salaryExpectation: String(formData.get("salario") || ""),
-      coverLetter: String(formData.get("carta") || ""),
-      // Solo asignar positionId si seleccionó una posición específica del sistema
-      positionId: positionId,
+      salary_expectation: String(formData.get("salario") || ""),
+      cover_letter: String(formData.get("carta") || ""),
+      // Solo asignar position_id si seleccionó una posición específica del sistema
+      position_id: positionId,
     };
 
     try {
@@ -214,12 +214,12 @@ export default function CareersPage() {
       <div className="container mx-auto px-4 py-16">
         {/* Posiciones Disponibles */}
         {Array.isArray(jobPositions) &&
-        jobPositions.filter((jp) => jp.isActive).length > 0 ? (
+        jobPositions.filter((jp) => jp.is_active).length > 0 ? (
           <div className="mb-16">
             <div className="text-center mb-12">
               <span className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium bg-linear-to-r from-[#038C7F] to-[#11B4D9] text-white mb-6 shadow-lg">
                 <CheckCircle2 className="mr-2 h-4 w-4" />
-                {jobPositions.filter((jp) => jp.isActive)
+                {jobPositions.filter((jp) => jp.is_active)
                   .length === 1
                   ? "Posición Disponible"
                   : "Posiciones Disponibles"}
@@ -235,7 +235,7 @@ export default function CareersPage() {
 
             <div className="space-y-8 max-w-7xl mx-auto">
               {jobPositions
-                .filter((jp) => jp.isActive)
+                .filter((jp) => jp.is_active)
                 .map((jobPosition) => (
                   <div
                     key={jobPosition.id}
@@ -253,7 +253,7 @@ export default function CareersPage() {
 
                     {/* Contenido principal */}
                     <div className="relative bg-white rounded-3xl p-8 m-0.5 backdrop-blur-sm">
-                      {jobPosition.isFeatured && (
+                      {jobPosition.is_featured && (
                         <div className="absolute top-4 right-4">
                           <div className="inline-flex items-center bg-linear-to-r from-[#11B4D9] to-[#038C7F] text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                             <Star className="mr-1 h-3 w-3" />
@@ -289,16 +289,16 @@ export default function CareersPage() {
                             </div>
                             <div className="flex items-center bg-[#038C7F]/10 text-[#038C7F] px-4 py-2 rounded-full text-sm font-medium">
                               <Clock className="mr-2 h-4 w-4" />
-                              {jobPosition.employmentType || "Tiempo completo"}
+                              {jobPosition.employment_type || "Tiempo completo"}
                             </div>
                             <div className="flex items-center bg-[#07598C]/10 text-[#07598C] px-4 py-2 rounded-full text-sm font-medium">
                               <GraduationCap className="mr-2 h-4 w-4" />
-                              {jobPosition.experienceMin ? `${jobPosition.experienceMin}+ años` : "Experiencia variable"}
+                              {jobPosition.experience_min ? `${jobPosition.experience_min}+ años` : "Experiencia variable"}
                             </div>
-                            {jobPosition.salaryMin && jobPosition.salaryMax && (
+                            {jobPosition.salary_min && jobPosition.salary_max && (
                               <div className="flex items-center bg-[#11B4D9]/10 text-[#11B4D9] px-4 py-2 rounded-full text-sm font-medium">
                                 <Scale className="mr-2 h-4 w-4" />
-                                S/ {jobPosition.salaryMin.toLocaleString()} - S/ {jobPosition.salaryMax.toLocaleString()}
+                                S/ {jobPosition.salary_min.toLocaleString()} - S/ {jobPosition.salary_max.toLocaleString()}
                               </div>
                             )}
                           </div>
