@@ -1,0 +1,11 @@
+{
+  email victor.olivares@emma.pe
+}
+
+descubre.emma.pe {
+  encode gzip
+
+  reverse_proxy /api/v1* backend:3001
+  reverse_proxy /uploads/* backend:3001
+  reverse_proxy frontend:3000
+}
