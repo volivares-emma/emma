@@ -28,6 +28,7 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       DB_DATABASE: ${POSTGRES_DB:-emma}
       JWT_SECRET: ${JWT_SECRET:-change-me}
+      RUN_DB_INIT: ${RUN_DB_INIT:-false}
       PORT: 3001
     depends_on:
       - db
