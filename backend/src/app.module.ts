@@ -29,6 +29,11 @@ import { ReportsModule } from '@modules/reports/reports.module';
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
         url: config.get('DATABASE_URL'),
+        host: config.get('DB_HOST') || 'localhost',
+        port: parseInt(config.get('DB_PORT') || '5432', 10),
+        username: config.get('DB_USERNAME') || 'postgres',
+        password: config.get('DB_PASSWORD') || 'postgres',
+        database: config.get('DB_DATABASE') || 'emma',
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
         logging: true,
