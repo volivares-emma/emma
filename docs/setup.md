@@ -32,12 +32,17 @@ Web: http://localhost:3000
 ## Producción con Docker + Caddy
 1. En la raíz del proyecto: `cp .env.docker .env`
 2. Editar valores sensibles (`POSTGRES_PASSWORD`, `JWT_SECRET`, etc.)
+3. (Solo primera vez) setear `RUN_DB_INIT=true` para crear tablas y seed
 3. `docker compose up -d --build`
 
 ### Actualizar código en servidor (después de push)
 1. `git pull`
 2. `docker compose up -d --build`
 3. (Opcional) Verificar estado: `docker compose ps`
+
+Notas:
+- `RUN_DB_INIT=true` ejecuta `schema:sync` + `seed` al arrancar el backend.
+- Después de la primera inicialización, vuelve a `RUN_DB_INIT=false`.
 
 ### Detener y limpiar Docker
 1. Detener servicios: `docker compose down`
