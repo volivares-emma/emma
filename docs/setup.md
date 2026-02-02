@@ -34,6 +34,11 @@ Web: http://localhost:3000
 2. Editar valores sensibles (`POSTGRES_PASSWORD`, `JWT_SECRET`, etc.)
 3. `docker compose up -d --build`
 
+### Actualizar código en servidor (después de push)
+1. `git pull`
+2. `docker compose up -d --build`
+3. (Opcional) Verificar estado: `docker compose ps`
+
 ### Detener y limpiar Docker
 1. Detener servicios: `docker compose down`
 2. Limpiar imágenes, contenedores y volúmenes: `docker system prune -a --volumes -f`
