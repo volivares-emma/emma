@@ -43,9 +43,35 @@ Web: http://localhost:3000
 1. Detener servicios: `docker compose down`
 2. Limpiar imágenes, contenedores y volúmenes: `docker system prune -a --volumes -f`
 
+### Limpieza de Docker (rápida y segura)
+Comando más efectivo para dejar Docker ligero:
+- `docker system prune -a --volumes`
+
+Qué elimina:
+- Contenedores detenidos
+- Imágenes no usadas
+- Networks no usados
+- Volúmenes no usados
+- Caché de build
+
+Advertencia:
+- Borra TODO lo que no esté en uso. Si tienes datos en volúmenes que no están montados en contenedores activos, se perderán.
+
+Modo controlado (recomendado):
+1. Ver uso de espacio: `docker system df`
+2. Limpiar builds: `docker builder prune -a`
+3. Limpiar imágenes: `docker image prune -a`
+4. Limpiar volúmenes huérfanos: `docker volume prune`
+
+Flujo sugerido:
+1. `docker system df`
+2. `docker builder prune -a`
+3. `docker image prune -a`
+4. `docker volume prune`
+
 Notas:
 - Caddy expone los puertos 80/443 y gestiona SSL.
 - El dominio se configura en `Caddyfile`.
 
 ## Migraciones y seed
-- Ver [MIGRATIONS.md](./MIGRATIONS.md)
+- Ver [migrations.md](./migrations.md)
