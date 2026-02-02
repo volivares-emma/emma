@@ -314,9 +314,7 @@ export default function Slides() {
                       asChild
                       className="relative bg-linear-to-r from-[#035AA6] via-[#11B4D9] to-[#07598C] text-white px-6 py-6 rounded-2xl font-bold shadow-2xl hover:shadow-[#11B4D9]/25 transition-all duration-500 hover:scale-105 hover:-translate-y-1"
                     >
-                      <Link
-                        href={slide.button_link || "/contact"}
-                      >
+                      <Link href={slide.button_link || "/contact"}>
                         <span className="relative flex items-center gap-2">
                           <Users className="h-5 w-5" />{" "}
                           {slide.button_text || "Solicitar Demo"}
@@ -348,34 +346,37 @@ export default function Slides() {
                       <div className="absolute inset-y-0 right-0 w-16 bg-linear-to-l from-[#0D0D0D]/85 to-transparent" />
                       <div className="flex items-center gap-4 px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <span className="inline-flex h-2 w-2 rounded-full bg-[#11B4D9] animate-pulse" />
-                          <span className="text-xs uppercase tracking-[0.2em] text-[#11B4D9]">
-                            Indicadores clave
-                          </span>
-                        </div>
-                        <div className="h-6 w-px bg-white/10" />
-                        <div className="relative h-12 flex-1 overflow-hidden">
-                          <div
-                            className="transition-transform duration-700"
-                            style={{ transform: `translateY(-${statsIndex * 48}px)` }}
-                          >
-                            {statsItems.map((item) => {
-                              const Icon = item.icon;
-                              return (
-                                <div
-                                  key={`${item.v}-${item.k}`}
-                                  className="h-12 flex items-center gap-3"
-                                >
-                                  <div className="h-9 w-9 rounded-xl bg-[#0D0D0D]/60 border border-white/10 flex items-center justify-center">
-                                    <Icon className="h-4 w-4 text-[#11B4D9]" />
+                          <div className="relative h-12 flex-1 overflow-hidden">
+                            <div
+                              className="transition-transform duration-700"
+                              style={{
+                                transform: `translateY(-${statsIndex * 48}px)`,
+                              }}
+                            >
+                              {statsItems.map((item) => {
+                                const Icon = item.icon;
+                                return (
+                                  <div
+                                    key={`${item.v}-${item.k}`}
+                                    className="h-12 flex items-center justify-between gap-4"
+                                  >
+                                    <div className="flex items-center gap-4">
+                                      <div className="h-9 w-9 rounded-xl bg-[#0D0D0D]/60 border border-white/10 flex items-center justify-center">
+                                        <Icon className="h-4 w-4 text-[#11B4D9]" />
+                                      </div>
+                                      <span
+                                        className={`text-2xl font-bold ${item.className}`}
+                                      >
+                                        {item.v}
+                                      </span>
+                                    </div>
+                                    <span className="text-lg font-bold text-slate-300">
+                                      {item.k}
+                                    </span>
                                   </div>
-                                  <span className={`text-2xl font-bold ${item.className}`}>
-                                    {item.v}
-                                  </span>
-                                  <span className="text-sm text-slate-300">{item.k}</span>
-                                </div>
-                              );
-                            })}
+                                );
+                              })}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -395,7 +396,7 @@ export default function Slides() {
                     }`}
                   >
                     {slideVisualType === "image" && hasImage ? (
-                      <div className="relative w-full overflow-visible rounded-2xl h-90 md:h-100 lg:h-120">
+                      <div className="relative w-full max-w-2xl mx-auto overflow-visible rounded-2xl aspect-square">
                         {/* Órbita de íconos */}
                         <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
                           {/* Ring 1 */}
@@ -411,7 +412,11 @@ export default function Slides() {
                           {/* Ring 2 */}
                           <div
                             className="absolute rounded-full border border-white/8 animate-[spin_38s_linear_infinite]"
-                            style={{ width: "74%", height: "74%", animationDirection: "reverse" }}
+                            style={{
+                              width: "74%",
+                              height: "74%",
+                              animationDirection: "reverse",
+                            }}
                           >
                             <div className="absolute right-1/4 top-0 -translate-y-1/2 h-9 w-9 rounded-full bg-white/10 border border-white/20 backdrop-blur flex items-center justify-center shadow-lg">
                               <Database className="h-4 w-4 text-[#11B4D9]" />
@@ -441,7 +446,11 @@ export default function Slides() {
                           {/* Ring 5 (centro) */}
                           <div
                             className="absolute rounded-full border border-white/16 animate-[spin_22s_linear_infinite]"
-                            style={{ width: "28%", height: "28%", animationDirection: "reverse" }}
+                            style={{
+                              width: "28%",
+                              height: "28%",
+                              animationDirection: "reverse",
+                            }}
                           >
                             <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/10 border border-white/20 backdrop-blur flex items-center justify-center shadow-lg">
                               <Star className="h-3 w-3 text-[#11B4D9]" />
@@ -453,7 +462,6 @@ export default function Slides() {
                           <div className="absolute bottom-16 left-20 h-1.5 w-1.5 rounded-full bg-[#038C7F]/70 shadow-[0_0_10px_rgba(3,140,127,0.6)]" />
                           <div className="absolute top-1/2 left-6 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-[#035AA6]/70 shadow-[0_0_10px_rgba(3,90,166,0.6)]" />
                           <div className="absolute bottom-6 right-6 h-1.5 w-1.5 rounded-full bg-white/70 shadow-[0_0_8px_rgba(255,255,255,0.6)]" />
-
                         </div>
 
                         <div className="relative w-full h-full overflow-hidden rounded-2xl">
