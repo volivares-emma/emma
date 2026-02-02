@@ -19,7 +19,7 @@ import {
   User,
   LogOut,
   LogIn,
-  Settings
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,19 +46,16 @@ export default function Header() {
   const { signOut } = useAuth();
 
   const handleSignOut = async () => {
-    toast.promise(
-      signOut(),
-      {
-        loading: 'Cerrando sesión...',
-        success: '¡Sesión cerrada exitosamente!',
-        error: 'Error al cerrar sesión',
-      }
-    );
+    toast.promise(signOut(), {
+      loading: "Cerrando sesión...",
+      success: "¡Sesión cerrada exitosamente!",
+      error: "Error al cerrar sesión",
+    });
   };
-  
+
   const linkBase =
     "text-[#035AA6] hover:text-[#11B4D9] transition-colors font-medium flex items-center";
-  
+
   const NavLink = ({
     href,
     label,
@@ -125,7 +122,9 @@ export default function Header() {
                   <Button variant="ghost" className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
                       <AvatarFallback>
-                        {session?.user?.username?.charAt(0)?.toUpperCase() || session?.user?.email?.charAt(0)?.toUpperCase() || 'U'}
+                        {session?.user?.username?.charAt(0)?.toUpperCase() ||
+                          session?.user?.email?.charAt(0)?.toUpperCase() ||
+                          "U"}
                       </AvatarFallback>
                     </Avatar>
                     <span className="text-sm font-medium text-[#035AA6]">
@@ -140,7 +139,9 @@ export default function Header() {
                       Mis Cursos
                     </Link>
                   </DropdownMenuItem>
-                  {(session?.user?.role === 'admin' || session?.user?.role === 'editor' || session?.user?.role === 'reader') && (
+                  {(session?.user?.role === "admin" ||
+                    session?.user?.role === "editor" ||
+                    session?.user?.role === "reader") && (
                     <DropdownMenuItem asChild>
                       <Link href="/admin" className="flex items-center">
                         <Settings className="mr-2 h-4 w-4" />
@@ -149,7 +150,7 @@ export default function Header() {
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem 
+                  <DropdownMenuItem
                     onClick={handleSignOut}
                     className="text-red-600 focus:text-red-600"
                   >
@@ -171,9 +172,7 @@ export default function Header() {
                 </Link> */}
 
                 <Button asChild variant="outline" className="mr-2">
-                  <Link href="/login">
-                    Iniciar Sesión
-                  </Link>
+                  <Link href="/login">Iniciar Sesión</Link>
                 </Button>
 
                 <Button
@@ -221,7 +220,11 @@ export default function Header() {
                   <NavLink href="/contact" label="Contacto" icon={Mail} />
                   <NavLink href="/blog" label="Blog" icon={Newspaper} />
                   {isAuthenticated && (
-                    <NavLink href="/my-courses" label="Mis Cursos" icon={BookOpen} />
+                    <NavLink
+                      href="/my-courses"
+                      label="Mis Cursos"
+                      icon={BookOpen}
+                    />
                   )}
                   <hr className="border-[#11B4D9]/20" />
                   {isLoading ? (
@@ -231,8 +234,14 @@ export default function Header() {
                     </div>
                   ) : isAuthenticated ? (
                     <>
-                      {(session?.user?.role === 'admin' || session?.user?.role === 'editor' || session?.user?.role === 'reader') && (
-                        <NavLink href="/admin" label="Panel Admin" icon={Settings} />
+                      {(session?.user?.role === "admin" ||
+                        session?.user?.role === "editor" ||
+                        session?.user?.role === "reader") && (
+                        <NavLink
+                          href="/admin"
+                          label="Panel Admin"
+                          icon={Settings}
+                        />
                       )}
                       <button
                         onClick={handleSignOut}
@@ -244,10 +253,7 @@ export default function Header() {
                     </>
                   ) : isUnauthenticated ? (
                     <>
-                      <Link
-                        href="/login"
-                        className={`${linkBase} text-lg`}
-                      >
+                      <Link href="/login" className={`${linkBase} text-lg`}>
                         <LogIn className="mr-4 h-5 w-5" />
                         Iniciar Sesión
                       </Link>
@@ -263,26 +269,6 @@ export default function Header() {
                     </>
                   ) : null}
                 </div>
-                <div className="flex flex-col md:hidden px-6 py-4 border-t border-[#11B4D9]/20">
-                  {isAuthenticated ? (
-                    <div className="flex items-center gap-3">
-                      <Eye className="mr-4 h-5 w-5 text-[#11B4D9]" />
-                      Ver Prototipo
-                    </div>
-                  )
-                  : (
-                    <>
-                      <Link
-                        href="/login"
-                        className={`${linkBase} text-lg`}
-                      >
-                        <LogIn className="mr-4 h-5 w-5" />
-                        Iniciar Sesión
-                      </Link>
-                    </>
-                  )}
-                </div>
-
                 {/* Mobile footer */}
                 <div className="px-6 py-6 border-t border-[#11B4D9]/20 bg-[#11B4D9]/5">
                   {isAuthenticated ? (
@@ -290,7 +276,11 @@ export default function Header() {
                       <div className="flex items-center justify-center gap-2 mb-2">
                         <Avatar className="h-8 w-8">
                           <AvatarFallback>
-                            {session?.user?.username?.charAt(0)?.toUpperCase() || session?.user?.email?.charAt(0)?.toUpperCase() || 'U'}
+                            {session?.user?.username
+                              ?.charAt(0)
+                              ?.toUpperCase() ||
+                              session?.user?.email?.charAt(0)?.toUpperCase() ||
+                              "U"}
                           </AvatarFallback>
                         </Avatar>
                         <span className="text-sm font-medium text-[#035AA6]">
@@ -298,30 +288,6 @@ export default function Header() {
                         </span>
                       </div>
                     </div>
-                  ) : isUnauthenticated ? (
-                    <>
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="w-full mb-3"
-                      >
-                        <Link href="/login">
-                          Iniciar Sesión
-                        </Link>
-                      </Button>
-                      <Button
-                        asChild
-                        className="w-full bg-linear-to-r from-[#035AA6] to-[#11B4D9] text-white px-6 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl hover:from-[#07598C] hover:to-[#11B4D9]"
-                      >
-                        <Link
-                          href="/contact"
-                          className="flex items-center justify-center"
-                        >
-                          <Rocket className="mr-2 h-5 w-5" />
-                          Únete al Beta
-                        </Link>
-                      </Button>
-                    </>
                   ) : null}
                   <div className="mt-4 text-center">
                     <span className="text-xs text-[#07598C]">

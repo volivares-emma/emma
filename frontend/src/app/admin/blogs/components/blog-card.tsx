@@ -72,7 +72,7 @@ export function BlogCard({ blog, onEdit, onDelete }: BlogCardProps) {
               <Button 
                 variant="secondary" 
                 size="sm" 
-                className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-sm"
+                className="opacity-100 bg-[#035AA6] text-white hover:bg-[#07598C]"
               >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>

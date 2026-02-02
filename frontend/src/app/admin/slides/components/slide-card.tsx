@@ -133,13 +133,13 @@ export function SlideCard({
         </div>
 
         {/* Dropdown */}
-        <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute bottom-3 right-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 size="sm"
                 variant="secondary"
-                className="h-8 w-8 p-0 bg-white/90 backdrop-blur-sm"
+                className="h-8 w-8 p-0 bg-[#035AA6] text-white hover:bg-[#07598C]"
               >
                 <GripVertical className="h-4 w-4" />
               </Button>
