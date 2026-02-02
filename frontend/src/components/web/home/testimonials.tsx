@@ -124,7 +124,7 @@ export default function Testimonials() {
             <motion.div key={t.id} variants={item}>
               <Card className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#11B4D9]/10 relative group">
                 <CardContent className="p-8">
-                  {t.isFeatured && (
+                  {t.is_featured && (
                     <div className="absolute -top-3 -right-3">
                       <div className="bg-linear-to-r from-amber-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                         <Star className="w-3.5 h-3.5 inline mr-1" /> Destacado
@@ -169,9 +169,9 @@ export default function Testimonials() {
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     <span className="flex items-center">
                       <Calendar className="w-4 h-4 mr-2" />
-                      {new Date(t.createdAt).toLocaleDateString("es-ES")}
+                      {new Date(t.created_at).toLocaleDateString("es-ES")}
                     </span>
-                    {t.isActive && (
+                    {t.is_active && (
                       <span className="flex items-center text-[#038C7F] bg-[#038C7F]/10 px-2 py-1 rounded-full">
                         <BadgeCheck className="w-4 h-4 mr-1" /> Verificado
                       </span>

@@ -4,29 +4,6 @@ import { cookies } from 'next/headers';
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
-type RawTestimonial = Record<string, any>;
-
-const toCamelTestimonial = (item: RawTestimonial) => ({
-  id: item.id,
-  name: item.name,
-  position: item.position,
-  company: item.company,
-  content: item.content,
-  rating: item.rating,
-  isFeatured: item.is_featured,
-  createdAt: item.created_at,
-  updatedAt: item.updated_at,
-});
-
-const toBackendPayload = (body: RawTestimonial) => ({
-  name: body.name,
-  content: body.content,
-  position: body.position,
-  company: body.company,
-  rating: body.rating,
-  is_featured: body.isFeatured,
-});
-
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -44,7 +21,7 @@ export async function PUT(
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-      body: JSON.stringify(toBackendPayload(body)),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -53,7 +30,7 @@ export async function PUT(
     }
 
     const data = await response.json();
-    return NextResponse.json(toCamelTestimonial(data), { status: 200 });
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Error updating testimonial:', error);
     return NextResponse.json(

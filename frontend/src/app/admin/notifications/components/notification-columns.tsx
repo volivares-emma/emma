@@ -91,10 +91,10 @@ export const NotificationColumns = ({ onEdit, onDelete }: NotificationColumnsPro
     },
   },
   {
-    accessorKey: "notificationType",
+    accessorKey: "notification_type",
     header: "Tipo",
     cell: ({ row }) => {
-      const type = row.getValue("notificationType") as string;
+      const type = row.getValue("notification_type") as string;
       const config = notificationTypes[type as keyof typeof notificationTypes];
       
       if (!config) return <Badge variant="secondary">{type}</Badge>;
@@ -110,10 +110,10 @@ export const NotificationColumns = ({ onEdit, onDelete }: NotificationColumnsPro
     },
   },
   {
-    accessorKey: "showOnPages",
+    accessorKey: "show_on_pages",
     header: "Páginas",
     cell: ({ row }) => {
-      const showOnPages = row.getValue("showOnPages") as string;
+      const showOnPages = row.getValue("show_on_pages") as string;
       const config = showOnPagesConfig[showOnPages as keyof typeof showOnPagesConfig];
       
       if (!config) return <Badge variant="secondary">{showOnPages}</Badge>;
@@ -129,10 +129,10 @@ export const NotificationColumns = ({ onEdit, onDelete }: NotificationColumnsPro
     },
   },
   {
-    accessorKey: "isActive",
+    accessorKey: "is_active",
     header: "Estado",
     cell: ({ row }) => {
-      const isActive = row.getValue("isActive") as boolean;
+      const isActive = row.getValue("is_active") as boolean;
       return (
         <Badge className={isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
           {isActive ? (
@@ -151,11 +151,11 @@ export const NotificationColumns = ({ onEdit, onDelete }: NotificationColumnsPro
     },
   },
   {
-    accessorKey: "actionText",
+    accessorKey: "action_text",
     header: "Acción",
     cell: ({ row }) => {
-      const actionText = row.getValue("actionText") as string;
-      const actionUrl = row.original.actionUrl;
+      const actionText = row.getValue("action_text") as string;
+      const actionUrl = row.original.action_url;
       
       if (!actionText && !actionUrl) {
         return <span className="text-muted-foreground text-sm">Sin acción</span>;
@@ -188,10 +188,10 @@ export const NotificationColumns = ({ onEdit, onDelete }: NotificationColumnsPro
     },
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: "created_at",
     header: "Fecha",
     cell: ({ row }) => {
-      const date = new Date(row.getValue("createdAt"));
+      const date = new Date(row.getValue("created_at"));
       return (
         <div className="text-sm">
           <div>{date.toLocaleDateString()}</div>

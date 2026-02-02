@@ -2,14 +2,14 @@ export interface Notification {
   id: number;
   title: string;
   description: string;
-  notificationType: 'system' | 'news' | 'event' | 'promotion' | 'warning';
-  actionUrl?: string;
-  actionText?: string;
-  isActive?: boolean;
+  notification_type: 'system' | 'news' | 'event' | 'promotion' | 'warning';
+  action_url?: string | null;
+  action_text?: string | null;
+  is_active?: boolean;
   dismissible?: boolean;
-  showOnPages: 'all' | 'home' | 'specific';
-  createdAt: string;
-  updatedAt: string;
+  show_on_pages: 'all' | 'home' | 'specific';
+  created_at: string;
+  updated_at: string;
 }
 
 export interface NotificationListResponse {
@@ -22,23 +22,23 @@ export interface NotificationListResponse {
 export interface NotificationCreatePayload {
   title: string;
   description: string;
-  notificationType: 'system' | 'news' | 'event' | 'promotion' | 'warning';
-  actionUrl?: string;
-  actionText?: string;
-  isActive?: boolean;
+  notification_type: 'system' | 'news' | 'event' | 'promotion' | 'warning';
+  action_url?: string | null;
+  action_text?: string | null;
+  is_active?: boolean;
   dismissible?: boolean;
-  showOnPages: 'all' | 'home' | 'specific';
+  show_on_pages: 'all' | 'home' | 'specific';
 }
 
 export interface NotificationUpdatePayload {
   title?: string;
   description?: string;
-  notificationType?: 'system' | 'news' | 'event' | 'promotion' | 'warning';
-  actionUrl?: string;
-  actionText?: string;
-  isActive?: boolean;
+  notification_type?: 'system' | 'news' | 'event' | 'promotion' | 'warning';
+  action_url?: string | null;
+  action_text?: string | null;
+  is_active?: boolean;
   dismissible?: boolean;
-  showOnPages?: 'all' | 'home' | 'specific';
+  show_on_pages?: 'all' | 'home' | 'specific';
 }
 
 export type NotificationResponse = Notification[];

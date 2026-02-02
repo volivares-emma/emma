@@ -85,19 +85,19 @@ export default function SlidesPage() {
     title: "",
     subtitle: "",
     description: "",
-    buttonText: "",
-    buttonLink: "",
-    visualType: "image",
-    isActive: true,
-    sortOrder: 0,
+    button_text: "",
+    button_link: "",
+    visual_type: "image",
+    is_active: true,
+    sort_order: 0,
   });
   const [preview, setPreview] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   // Estadísticas
   const totalSlides = slides.length;
-  const activeSlides = slides.filter((s) => s.isActive).length;
-  const inactiveSlides = slides.filter((s) => !s.isActive).length;
+  const activeSlides = slides.filter((s) => s.is_active).length;
+  const inactiveSlides = slides.filter((s) => !s.is_active).length;
 
   useEffect(() => {
     fetchSlides();
@@ -153,9 +153,9 @@ export default function SlidesPage() {
           return { ...s, files };
         })
       );
-      // Ordenar por sortOrder
+      // Ordenar por sort_order
       const sortedSlides = slidesWithFiles.sort(
-        (a, b) => a.sortOrder - b.sortOrder
+        (a, b) => (a.sort_order || 0) - (b.sort_order || 0)
       );
       setSlides(sortedSlides);
     } catch (error) {
@@ -197,21 +197,21 @@ export default function SlidesPage() {
             title: slide.title || "",
             subtitle: slide.subtitle || "",
             description: slide.description || "",
-            buttonText: slide.buttonText || "",
-            buttonLink: slide.buttonLink || "",
-            visualType: slide.visualType || slide.visual_type || "image",
-            isActive: slide.isActive,
-            sortOrder: slide.sortOrder,
+            button_text: slide.button_text || "",
+            button_link: slide.button_link || "",
+            visual_type: slide.visual_type || "image",
+            is_active: slide.is_active,
+            sort_order: slide.sort_order,
           }
         : {
             title: "",
             subtitle: "",
             description: "",
-            buttonText: "",
-            buttonLink: "",
-            visualType: "image",
-            isActive: true,
-            sortOrder: slides.length + 1,
+            button_text: "",
+            button_link: "",
+            visual_type: "image",
+            is_active: true,
+            sort_order: slides.length + 1,
           }
     );
     // Reset file and preview state
@@ -227,11 +227,11 @@ export default function SlidesPage() {
       title: "",
       subtitle: "",
       description: "",
-      buttonText: "",
-      buttonLink: "",
-      visualType: "image",
-      isActive: true,
-      sortOrder: 0,
+      button_text: "",
+      button_link: "",
+      visual_type: "image",
+      is_active: true,
+      sort_order: 0,
     });
     // Reset file and preview state and cleanup URL
     if (preview) {
@@ -344,16 +344,16 @@ export default function SlidesPage() {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ isActive: !slide.isActive }),
+        body: JSON.stringify({ is_active: !slide.is_active }),
       });
 
       if (!res.ok) {
         throw new Error("Error al cambiar estado");
       }
 
-      toast.success(slide.isActive ? "Slide desactivado" : "Slide activado", {
+      toast.success(slide.is_active ? "Slide desactivado" : "Slide activado", {
         description: `El slide se ${
-          slide.isActive ? "desactivó" : "activó"
+          slide.is_active ? "desactivó" : "activó"
         } correctamente.`,
       });
 
@@ -565,22 +565,22 @@ export default function SlidesPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="buttonText">Texto del botón</Label>
+                <Label htmlFor="button_text">Texto del botón</Label>
                 <Input
-                  id="buttonText"
-                  name="buttonText"
-                  value={form.buttonText}
+                  id="button_text"
+                  name="button_text"
+                  value={form.button_text || ""}
                   onChange={handleChange}
                   placeholder="Más información"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="buttonLink">Enlace del botón</Label>
+                <Label htmlFor="button_link">Enlace del botón</Label>
                 <Input
-                  id="buttonLink"
-                  name="buttonLink"
+                  id="button_link"
+                  name="button_link"
                   type="url"
-                  value={form.buttonLink}
+                  value={form.button_link || ""}
                   onChange={handleChange}
                   placeholder="https://ejemplo.com"
                 />
@@ -589,11 +589,11 @@ export default function SlidesPage() {
 
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="visualType">Tipo visual</Label>
+                <Label htmlFor="visual_type">Tipo visual</Label>
                 <Select
-                  value={form.visualType}
+                  value={form.visual_type}
                   onValueChange={(value) =>
-                    handleSelectChange("visualType", value)
+                    handleSelectChange("visual_type", value)
                   }
                 >
                   <SelectTrigger>
@@ -616,31 +616,31 @@ export default function SlidesPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="sortOrder">Orden *</Label>
+                <Label htmlFor="sort_order">Orden *</Label>
                 <Input
-                  id="sortOrder"
-                  name="sortOrder"
+                  id="sort_order"
+                  name="sort_order"
                   type="number"
                   min="1"
                   max="10"
-                  value={form.sortOrder}
+                  value={form.sort_order}
                   onChange={handleChange}
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="isActive">Estado</Label>
+                <Label htmlFor="is_active">Estado</Label>
                 <div className="flex items-center space-x-2 pt-2">
                   <Switch
-                    id="isActive"
-                    checked={form.isActive}
+                    id="is_active"
+                    checked={!!form.is_active}
                     onCheckedChange={(checked) =>
-                      handleSwitchChange("isActive", checked)
+                      handleSwitchChange("is_active", checked)
                     }
                   />
-                  <Label htmlFor="isActive" className="text-sm">
-                    {form.isActive ? "Activo" : "Inactivo"}
+                  <Label htmlFor="is_active" className="text-sm">
+                    {form.is_active ? "Activo" : "Inactivo"}
                   </Label>
                 </div>
               </div>

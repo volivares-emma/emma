@@ -78,9 +78,9 @@ export function AssignCourseDialog({
     }
 
     onAssign({
-      courseId: parseInt(selectedCourse),
-      userIds: selectedUsers.map(id => parseInt(id)),
-      dueDate: dueDate || null,
+      course_id: parseInt(selectedCourse),
+      user_ids: selectedUsers.map(id => parseInt(id)),
+      due_date: dueDate || null,
     });
 
     onClose();

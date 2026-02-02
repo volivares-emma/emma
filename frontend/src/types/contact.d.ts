@@ -7,10 +7,6 @@ export interface ContactNote {
   created_by_name?: string;
   created_at?: string;
   updated_at?: string;
-  // Legacy (por compatibilidad)
-  createdBy?: string;
-  createdAt?: string;
-  updatedAt?: string;
   [key: string]: JsonArray;
 }
 

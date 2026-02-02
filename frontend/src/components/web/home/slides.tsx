@@ -48,7 +48,7 @@ export default function Slides() {
 
   // Auto-slide functionality
   useEffect(() => {
-    const activeSlides = slides.filter((s) => s.isActive);
+    const activeSlides = slides.filter((s) => s.is_active);
     if (activeSlides.length <= 1) return;
 
     const interval = setInterval(() => {
@@ -156,9 +156,7 @@ export default function Slides() {
 
       // Ordenar por sort_order
       const sortedSlides = slidesWithFiles.sort(
-        (a, b) =>
-          (a.sort_order || a.sortOrder || 0) -
-          (b.sort_order || b.sortOrder || 0),
+        (a, b) => (a.sort_order || 0) - (b.sort_order || 0),
       );
       setSlides(sortedSlides);
     } catch (error) {
@@ -182,7 +180,7 @@ export default function Slides() {
     return <SkeletonSlide />;
   }
 
-  const activeSlides = slides.filter((s) => s.is_active ?? s.isActive);
+  const activeSlides = slides.filter((s) => s.is_active);
   if (activeSlides.length === 0) return null;
 
   const slide = activeSlides[currentSlide];
@@ -190,7 +188,6 @@ export default function Slides() {
     Array.isArray(slide.files) && slide.files.length > 0 && slide.files[0].path;
   const imagePath = hasImage ? slide.files?.[0]?.path : undefined;
   const slideVisualType = (slide.visual_type ||
-    slide.visualType ||
     (hasImage ? "image" : "dashboard")) as VisualType;
 
   return (
@@ -318,15 +315,11 @@ export default function Slides() {
                       className="relative bg-linear-to-r from-[#035AA6] via-[#11B4D9] to-[#07598C] text-white px-6 py-6 rounded-2xl font-bold shadow-2xl hover:shadow-[#11B4D9]/25 transition-all duration-500 hover:scale-105 hover:-translate-y-1"
                     >
                       <Link
-                        href={
-                          slide.button_link || slide.buttonLink || "/contact"
-                        }
+                        href={slide.button_link || "/contact"}
                       >
                         <span className="relative flex items-center gap-2">
                           <Users className="h-5 w-5" />{" "}
-                          {slide.button_text ||
-                            slide.buttonText ||
-                            "Solicitar Demo"}
+                          {slide.button_text || "Solicitar Demo"}
                         </span>
                       </Link>
                     </Button>

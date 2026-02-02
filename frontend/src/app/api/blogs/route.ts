@@ -4,33 +4,6 @@ import { cookies } from 'next/headers';
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
-type RawBlog = Record<string, any>;
-
-const toCamelBlog = (item: RawBlog) => ({
-  id: item.id,
-  title: item.title,
-  description: item.description,
-  content: item.content,
-  authorId: item.author_id,
-  author: item.author,
-  slug: item.slug,
-  status: item.status,
-  pubDate: item.pub_date,
-  createdAt: item.created_at,
-  updatedAt: item.updated_at,
-  deletedAt: item.deleted_at,
-});
-
-const toBackendPayload = (body: RawBlog) => ({
-  title: body.title,
-  description: body.description,
-  content: body.content,
-  author_id: body.authorId,
-  slug: body.slug,
-  status: body.status,
-  pub_date: body.pubDate,
-});
-
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -58,11 +31,7 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    const mapped = {
-      ...data,
-      data: Array.isArray(data?.data) ? data.data.map(toCamelBlog) : [],
-    };
-    return NextResponse.json(mapped, { status: 200 });
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Error fetching blogs:', error);
     return NextResponse.json(
@@ -79,17 +48,13 @@ export async function POST(request: NextRequest) {
       request.cookies.get('access_token')?.value ||
       (await cookies()).get('access_token')?.value;
 
-    const payload = {
-      ...toBackendPayload(body),
-    };
-
     const response = await fetch(`${API_URL}/blogs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -98,7 +63,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(toCamelBlog(data), { status: 200 });
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Error creating blog:', error);
     return NextResponse.json(
@@ -129,7 +94,7 @@ export async function PUT(request: NextRequest) {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-      body: JSON.stringify(toBackendPayload(body)),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -138,7 +103,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(toCamelBlog(data), { status: 200 });
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Error updating blog:', error);
     return NextResponse.json(

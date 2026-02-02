@@ -6,8 +6,8 @@ interface BlogFile {
   path: string;
   related_type: string;
   related_id: number;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface Blog {
@@ -15,13 +15,13 @@ export interface Blog {
   title: string;
   description?: string | null;
   content: string;
-  authorId: number;
+  author_id: number;
   author?: User; // Relación opcional con User
   slug: string;
   status: "draft" | "published" | "archived";
-  pubDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  pub_date: Date;
+  created_at: Date;
+  updated_at: Date;
   files?: BlogFile[]; // Archivos asociados al blog
 }
 
@@ -36,20 +36,20 @@ export interface BlogCreatePayload {
   title: string;
   description?: string;
   content: string;
-  authorId: number;
+  author_id: number;
   slug: string;
   status: "draft" | "published" | "archived";
-  pubDate: string; // ISO string para el formulario
+  pub_date: string; // ISO string para el formulario
 }
 
 export interface BlogUpdatePayload {
   title?: string;
   content?: string;
   description?: string;
-  authorId?: number;
+  author_id?: number;
   slug?: string;
   status?: "draft" | "published" | "archived";
-  pubDate?: string;
+  pub_date?: string;
 }
 
 export type BlogResponse = Blog;

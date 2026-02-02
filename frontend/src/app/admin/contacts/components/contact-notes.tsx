@@ -33,12 +33,12 @@ export function ContactNotes({ contact, onNotesUpdate }: ContactNotesProps) {
 
   function isNoteObject(
     note: unknown
-  ): note is { id?: number; text: string; created_by_name?: string; createdBy?: string } {
+  ): note is { id?: number; text: string; created_by_name?: string } {
     return (
       typeof note === "object" &&
       note !== null &&
       "text" in note &&
-      ("created_by_name" in note || "createdBy" in note)
+      "created_by_name" in note
     );
   }
 
@@ -232,7 +232,7 @@ export function ContactNotes({ contact, onNotesUpdate }: ContactNotesProps) {
                         <p className="text-sm leading-relaxed">{note.text}</p>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <User className="h-3 w-3" />
-                          <span>{note.created_by_name || note.createdBy || ""}</span>
+                          <span>{note.created_by_name || ""}</span>
                         </div>
                       </div>
                       <div className="flex gap-2">

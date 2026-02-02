@@ -119,7 +119,7 @@ export function BlogCard({ blog, onEdit, onDelete }: BlogCardProps) {
           </div>
           <div className="flex items-center gap-1">
             <Calendar className="h-3 w-3" />
-            {new Date(blog.pubDate).toLocaleDateString()}
+            {new Date(blog.pub_date).toLocaleDateString()}
           </div>
         </div>
         
@@ -139,7 +139,7 @@ export function BlogCard({ blog, onEdit, onDelete }: BlogCardProps) {
             Slug: <code className="bg-muted px-1 rounded">{blog.slug}</code>
           </div>
           <div className="text-xs text-muted-foreground">
-            {new Date(blog.createdAt).toLocaleDateString()}
+            {new Date(blog.created_at).toLocaleDateString()}
           </div>
         </div>
       </CardContent>

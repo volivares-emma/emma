@@ -82,9 +82,7 @@ export function SlideCard({
   const imageUrl =
     slide.files && slide.files.length > 0 ? slide.files[0].path : null;
   const visualType = (
-    slide.visual_type ||
-    slide.visualType ||
-    (imageUrl ? 'image' : 'dashboard')
+    slide.visual_type || (imageUrl ? 'image' : 'dashboard')
   ) as keyof typeof visualTypeConfig;
   const typeConfig = visualTypeConfig[visualType];
   const TypeIcon = typeConfig.icon;
@@ -93,7 +91,7 @@ export function SlideCard({
     <Card
       key={slide.id}
       className={`group hover:shadow-lg transition-all duration-200 ${
-        !slide.isActive ? "opacity-60" : ""
+        !slide.is_active ? "opacity-60" : ""
       }`}
     >
       {/* Imagen */}
@@ -115,22 +113,22 @@ export function SlideCard({
         {/* Estado */}
         <div className="absolute top-3 left-3">
           <Badge
-            variant={slide.isActive ? "default" : "secondary"}
+            variant={slide.is_active ? "default" : "secondary"}
             className="gap-1"
           >
-            {slide.isActive ? (
+            {slide.is_active ? (
               <Eye className="h-3 w-3" />
             ) : (
               <EyeOff className="h-3 w-3" />
             )}
-            {slide.isActive ? "Activo" : "Inactivo"}
+            {slide.is_active ? "Activo" : "Inactivo"}
           </Badge>
         </div>
 
         {/* Orden */}
         <div className="absolute top-3 right-3">
           <Badge variant="outline" className="bg-white/90 backdrop-blur-sm">
-            #{slide.sortOrder}
+            #{slide.sort_order}
           </Badge>
         </div>
 
@@ -153,17 +151,17 @@ export function SlideCard({
                 Editar
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onToggleStatus(slide)}>
-                {slide.isActive ? (
+                {slide.is_active ? (
                   <EyeOff className="mr-2 h-4 w-4" />
                 ) : (
                   <Eye className="mr-2 h-4 w-4" />
                 )}
-                {slide.isActive ? "Desactivar" : "Activar"}
+                {slide.is_active ? "Desactivar" : "Activar"}
               </DropdownMenuItem>
-              {slide.buttonLink && (
+              {slide.button_link && (
                 <DropdownMenuItem asChild>
                   <a
-                    href={slide.buttonLink}
+                    href={slide.button_link}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -208,10 +206,10 @@ export function SlideCard({
           {slide.description}
         </p>
 
-        {slide.buttonText && (
+        {slide.button_text && (
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <ExternalLink className="h-3 w-3" />
-            <span className="truncate">{slide.buttonText}</span>
+            <span className="truncate">{slide.button_text}</span>
           </div>
         )}
       </CardContent>

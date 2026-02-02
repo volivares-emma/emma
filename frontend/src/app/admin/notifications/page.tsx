@@ -101,21 +101,21 @@ export default function NotificationsPage() {
   const [form, setForm] = useState<NotificationCreatePayload>({
     title: "",
     description: "",
-    notificationType: "system",
-    actionUrl: "",
-    actionText: "",
-    isActive: true,
+    notification_type: "system",
+    action_url: "",
+    action_text: "",
+    is_active: true,
     dismissible: true,
-    showOnPages: "all",
+    show_on_pages: "all",
   });
 
   // Estadísticas calculadas
   const totalNotifications = notifications.length;
-  const activeNotifications = notifications.filter((n) => n.isActive).length;
+  const activeNotifications = notifications.filter((n) => n.is_active).length;
   const systemNotifications = notifications.filter(
-    (n) => n.notificationType === "system"
+    (n) => n.notification_type === "system"
   ).length;
-  const inactiveNotifications = notifications.filter((n) => !n.isActive).length;
+  const inactiveNotifications = notifications.filter((n) => !n.is_active).length;
 
   useEffect(() => {
     fetchNotifications();
@@ -147,22 +147,22 @@ export default function NotificationsPage() {
         ? {
             title: notification.title || "",
             description: notification.description || "",
-            notificationType: notification.notificationType || "system",
-            actionUrl: notification.actionUrl || "",
-            actionText: notification.actionText || "",
-            isActive: notification.isActive ?? true,
+            notification_type: notification.notification_type || "system",
+            action_url: notification.action_url || "",
+            action_text: notification.action_text || "",
+            is_active: notification.is_active ?? true,
             dismissible: notification.dismissible ?? true,
-            showOnPages: notification.showOnPages || "all",
+            show_on_pages: notification.show_on_pages || "all",
           }
         : {
             title: "",
             description: "",
-            notificationType: "system",
-            actionUrl: "",
-            actionText: "",
-            isActive: true,
+            notification_type: "system",
+            action_url: "",
+            action_text: "",
+            is_active: true,
             dismissible: true,
-            showOnPages: "all",
+            show_on_pages: "all",
           }
     );
     setDialogOpen(true);
@@ -174,12 +174,12 @@ export default function NotificationsPage() {
     setForm({
       title: "",
       description: "",
-      notificationType: "system",
-      actionUrl: "",
-      actionText: "",
-      isActive: true,
+      notification_type: "system",
+      action_url: "",
+      action_text: "",
+      is_active: true,
       dismissible: true,
-      showOnPages: "all",
+      show_on_pages: "all",
     });
   };
 
@@ -396,11 +396,11 @@ export default function NotificationsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="notificationType">Tipo de notificación *</Label>
+                <Label htmlFor="notification_type">Tipo de notificación *</Label>
                 <Select
-                  value={form.notificationType}
+                  value={form.notification_type}
                   onValueChange={(value) =>
-                    handleSelectChange("notificationType", value)
+                    handleSelectChange("notification_type", value)
                   }
                 >
                   <SelectTrigger>
@@ -435,22 +435,22 @@ export default function NotificationsPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="actionText">Texto del botón</Label>
+                <Label htmlFor="action_text">Texto del botón</Label>
                 <Input
-                  id="actionText"
-                  name="actionText"
-                  value={form.actionText}
+                  id="action_text"
+                  name="action_text"
+                  value={form.action_text || ""}
                   onChange={handleChange}
                   placeholder="Ver más, Aceptar, etc."
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="actionUrl">URL de acción</Label>
+                <Label htmlFor="action_url">URL de acción</Label>
                 <Input
-                  id="actionUrl"
-                  name="actionUrl"
-                  value={form.actionUrl}
+                  id="action_url"
+                  name="action_url"
+                  value={form.action_url || ""}
                   onChange={handleChange}
                   placeholder="/route, https://example.com"
                 />
@@ -458,11 +458,11 @@ export default function NotificationsPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="showOnPages">Mostrar en páginas</Label>
+              <Label htmlFor="show_on_pages">Mostrar en páginas</Label>
               <Select
-                value={form.showOnPages}
+                value={form.show_on_pages}
                 onValueChange={(value) =>
-                  handleSelectChange("showOnPages", value)
+                  handleSelectChange("show_on_pages", value)
                 }
               >
                 <SelectTrigger>
@@ -481,14 +481,14 @@ export default function NotificationsPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Switch
-                  id="isActive"
-                  checked={form.isActive}
+                  id="is_active"
+                  checked={!!form.is_active}
                   onCheckedChange={(checked) =>
-                    handleSwitchChange("isActive", checked)
+                    handleSwitchChange("is_active", checked)
                   }
                 />
-                <Label htmlFor="isActive" className="flex items-center gap-2">
-                  {form.isActive ? (
+                <Label htmlFor="is_active" className="flex items-center gap-2">
+                  {form.is_active ? (
                     <Eye className="h-4 w-4 text-green-600" />
                   ) : (
                     <EyeOff className="h-4 w-4 text-gray-600" />

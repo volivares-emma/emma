@@ -5,9 +5,10 @@ export interface Testimonial {
   company?: string | null;
   content: string;
   rating: number;
-  isFeatured?: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  is_featured?: boolean;
+  is_active?: boolean;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface TestimonialListResponse {
@@ -23,7 +24,8 @@ export interface TestimonialCreatePayload {
   position?: string | null;
   company?: string | null;
   rating?: number;
-  isFeatured?: boolean;
+  is_featured?: boolean;
+  is_active?: boolean;
 }
 
 export interface TestimonialUpdatePayload {
@@ -32,7 +34,8 @@ export interface TestimonialUpdatePayload {
   position?: string | null;
   company?: string | null;
   rating?: number | null;
-  isFeatured?: boolean | null;
+  is_featured?: boolean | null;
+  is_active?: boolean | null;
 }
 
 

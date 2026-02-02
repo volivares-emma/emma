@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { AlertCircle, CheckCircle2, Info, BadgePercent, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { API_URL } from '@/utils/fetch-data';
 import type { Notification as NotificationType } from "@/types/notification";
 import SkeletonNotification from "../loading/skeleton-notification";
 import clsx from "clsx";
@@ -39,7 +38,7 @@ export default function Notification() {
 
   useEffect(() => {
     let isMounted = true;
-    fetch(`${API_URL}/notifications`, { method: "GET", credentials: "include" })
+    fetch("/api/notifications", { method: "GET", credentials: "include" })
       .then((res) => res.json())
       .then((payload) => {
         if (!isMounted) return;
@@ -62,8 +61,11 @@ export default function Notification() {
 
   // Derivado: solo activas y no cerradas
   const active = useMemo(
-    () => notifications.filter((n) => !closedIds.includes(n.id) && (n as any).isActive !== false),
-    [notifications, closedIds]
+    () =>
+      notifications.filter(
+        (n) => !closedIds.includes(n.id) && (n.is_active ?? true) !== false,
+      ),
+    [notifications, closedIds],
   );
 
   const handleClose = useCallback((id: number) => {
@@ -74,14 +76,14 @@ export default function Notification() {
   if (loading) return <SkeletonNotification />;
   if (!loading && active.length === 0) return null;
 
-  const mainVariant = coerceVariant((active[0] as any)?.notificationType);
+  const mainVariant = coerceVariant(active[0]?.notification_type);
   const theme = THEME[mainVariant];
 
   return (
     <section aria-label="Notificaciones" className={clsx(theme.sectionBg, theme.ring, "ring-1")}>
       <div className="mx-auto w-full max-w-screen-2xl sm:px-6 lg:px-8">
         {active.map((n) => {
-          const v = coerceVariant((n as any).notificationType);
+          const v = coerceVariant(n.notification_type);
           const Icon = ICONS[v];
           const t = THEME[v];
 
@@ -105,14 +107,14 @@ export default function Notification() {
               </div>
               {/* Derecha: acciones */}
               <div className="flex w-full flex-col items-stretch justify-center gap-2 md:w-auto md:flex-row md:items-center md:justify-end">
-                {n.actionText && n.actionUrl && (
+                {n.action_text && n.action_url && (
                   <Button
                     asChild
                     size="sm"
                     className="rounded-2xl px-4 sm:px-6 font-medium bg-white text-black hover:bg-white/90 w-full md:w-auto"
                   >
-                    <a href={n.actionUrl} target="_blank" rel="noopener noreferrer">
-                      {n.actionText}
+                    <a href={n.action_url} target="_blank" rel="noopener noreferrer">
+                      {n.action_text}
                     </a>
                   </Button>
                 )}

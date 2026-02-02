@@ -59,10 +59,10 @@ export function BlogDialog({ open, onOpenChange, editBlog, onSuccess }: BlogDial
     title: "",
     description: "",
     content: "",
-    authorId: 1,
+    author_id: 1,
     slug: "",
     status: "draft",
-    pubDate: new Date().toISOString().split('T')[0],
+    pub_date: new Date().toISOString().split('T')[0],
   });
 
   // Cargar usuarios cuando se abre el diálogo
@@ -86,20 +86,22 @@ export function BlogDialog({ open, onOpenChange, editBlog, onSuccess }: BlogDial
         title: editBlog.title || "",
         description: editBlog.description || "",
         content: editBlog.content || "",
-        authorId: editBlog.authorId || 1,
+        author_id: editBlog.author_id || 1,
         slug: editBlog.slug || "",
         status: editBlog.status || "draft",
-        pubDate: editBlog.pubDate ? new Date(editBlog.pubDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+        pub_date: editBlog.pub_date
+          ? new Date(editBlog.pub_date).toISOString().split('T')[0]
+          : new Date().toISOString().split('T')[0],
       });
     } else {
       setForm({
         title: "",
         description: "",
         content: "",
-        authorId: 1,
+        author_id: 1,
         slug: "",
         status: "draft",
-        pubDate: new Date().toISOString().split('T')[0],
+        pub_date: new Date().toISOString().split('T')[0],
       });
     }
   }, [editBlog]);
@@ -182,7 +184,7 @@ export function BlogDialog({ open, onOpenChange, editBlog, onSuccess }: BlogDial
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    const processedValue = name === 'authorId' ? Number(value) : value;
+    const processedValue = name === 'author_id' ? Number(value) : value;
     setForm((prev) => ({ ...prev, [name]: processedValue }));
   };
 
@@ -253,10 +255,10 @@ export function BlogDialog({ open, onOpenChange, editBlog, onSuccess }: BlogDial
       title: "",
       description: "",
       content: "",
-      authorId: 1,
+      author_id: 1,
       slug: "",
       status: "draft",
-      pubDate: new Date().toISOString().split('T')[0],
+      pub_date: new Date().toISOString().split('T')[0],
     });
     // Cleanup preview URL before reset
     if (preview) {
@@ -315,10 +317,10 @@ export function BlogDialog({ open, onOpenChange, editBlog, onSuccess }: BlogDial
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="authorId">Autor *</Label>
+              <Label htmlFor="author_id">Autor *</Label>
               <Select
-                value={form.authorId.toString()}
-                onValueChange={(value) => handleSelectChange("authorId", value)}
+                value={form.author_id.toString()}
+                onValueChange={(value) => handleSelectChange("author_id", value)}
                 disabled={loadingUsers}
               >
                 <SelectTrigger className="w-full">
@@ -364,12 +366,12 @@ export function BlogDialog({ open, onOpenChange, editBlog, onSuccess }: BlogDial
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="pubDate">Fecha de publicación *</Label>
+            <Label htmlFor="pub_date">Fecha de publicación *</Label>
             <Input
-              id="pubDate"
-              name="pubDate"
+              id="pub_date"
+              name="pub_date"
               type="date"
-              value={form.pubDate}
+              value={form.pub_date}
               onChange={handleChange}
               required
               className="max-w-xs"

@@ -230,7 +230,7 @@ export default function BlogPage() {
                       <div className="flex flex-wrap items-center gap-3 text-sm">
                         <div className="flex items-center gap-2 text-[#035AA6]/70 font-medium">
                           <Calendar className="h-4 w-4" />
-                          <FormattedDate date={featured.pubDate} />
+                          <FormattedDate date={featured.pub_date} />
                         </div>
                         <span className="text-[#035AA6]/50">•</span>
                         <div className="flex items-center gap-2 text-[#035AA6]/70 font-medium">
@@ -356,7 +356,7 @@ export default function BlogPage() {
                       {/* Fecha */}
                       <div className="flex items-center gap-2 text-xs text-[#035AA6]/70 font-medium">
                         <Calendar className="h-3.5 w-3.5" />
-                        <FormattedDate date={blog.pubDate} />
+                        <FormattedDate date={blog.pub_date} />
                       </div>
 
                       {/* Título */}

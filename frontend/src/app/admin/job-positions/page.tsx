@@ -275,6 +275,7 @@ export default function JobPositionsPage() {
         url = `/api/job-positions/${editPosition.id}`;
         method = "PATCH";
         payload = {
+          id: editPosition.id,
           title: form.title,
           description: form.description,
           department: form.department,

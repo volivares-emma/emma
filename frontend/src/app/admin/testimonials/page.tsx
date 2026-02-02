@@ -57,7 +57,7 @@ export default function TestimonialsPage() {
     position: "",
     company: "",
     rating: 5,
-    isFeatured: false,
+    is_featured: false,
   });
   const [submitting, setSubmitting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -67,7 +67,7 @@ export default function TestimonialsPage() {
 
   // Estadísticas (calculadas en el servidor, aquí usamos valores de la página actual)
   const totalTestimonials = totalItems;
-  const featuredTestimonials = testimonials.filter((t) => t.isFeatured).length;
+  const featuredTestimonials = testimonials.filter((t) => t.is_featured).length;
   const averageRating =
     testimonials.length > 0
       ? (
@@ -119,7 +119,7 @@ export default function TestimonialsPage() {
             position: testimonial.position || "",
             company: testimonial.company || "",
             rating: testimonial.rating,
-            isFeatured: testimonial.isFeatured,
+            is_featured: testimonial.is_featured,
           }
         : {
             name: "",
@@ -127,7 +127,7 @@ export default function TestimonialsPage() {
             position: "",
             company: "",
             rating: 5,
-            isFeatured: false,
+            is_featured: false,
           }
     );
     setDialogOpen(true);
@@ -142,7 +142,7 @@ export default function TestimonialsPage() {
       position: "",
       company: "",
       rating: 5,
-      isFeatured: false,
+      is_featured: false,
     });
   };
 
@@ -400,7 +400,7 @@ export default function TestimonialsPage() {
                     <div className="flex">
                       {renderStars(testimonial.rating)}
                     </div>
-                    {testimonial.isFeatured && (
+                    {testimonial.is_featured && (
                       <Badge variant="secondary" className="text-xs">
                         Destacado
                       </Badge>
@@ -576,14 +576,14 @@ export default function TestimonialsPage() {
               <div className="flex items-center space-x-2 pt-6">
                 <input
                   type="checkbox"
-                  id="isFeatured"
-                  checked={!!form.isFeatured}
+                  id="is_featured"
+                  checked={!!form.is_featured}
                   onChange={(e) =>
-                    setForm({ ...form, isFeatured: e.target.checked })
+                    setForm({ ...form, is_featured: e.target.checked })
                   }
                   className="h-4 w-4"
                 />
-                <Label htmlFor="isFeatured" className="text-sm">
+                <Label htmlFor="is_featured" className="text-sm">
                   Destacado
                 </Label>
               </div>

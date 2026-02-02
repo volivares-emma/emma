@@ -185,8 +185,8 @@ export default function Careers() {
 
                         <div className="flex flex-wrap gap-1.5 mb-4">
                           <span className="bg-[#035AA6]/20 text-[#11B4D9] px-2 py-1 rounded-full text-xs">{r.location || 'Remoto'}</span>
-                          <span className="bg-[#038C7F]/20 text-[#11B4D9] px-2 py-1 rounded-full text-xs">{r.employmentType || 'Tiempo completo'}</span>
-                          {r.isFeatured && (
+                          <span className="bg-[#038C7F]/20 text-[#11B4D9] px-2 py-1 rounded-full text-xs">{r.employment_type || 'Tiempo completo'}</span>
+                          {r.is_featured && (
                             <span className="bg-[#07598C]/20 text-[#11B4D9] px-2 py-1 rounded-full text-xs">Destacado</span>
                           )}
                         </div>

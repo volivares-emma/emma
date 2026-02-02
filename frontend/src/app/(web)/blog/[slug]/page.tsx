@@ -221,7 +221,7 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
                   <div className="flex items-center gap-4 text-sm text-gray-600">
                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-[#035AA6]" />
-                      <FormattedDate date={blog.pubDate} />
+                      <FormattedDate date={blog.pub_date} />
                     </div>
                     <div className="flex items-center gap-2">
                       <User className="h-4 w-4 text-[#035AA6]" />
@@ -377,7 +377,7 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
                         <div className="flex items-center justify-between text-xs text-gray-500 pt-2">
                           <div className="flex items-center gap-2">
                             <Calendar className="h-3 w-3" />
-                            <FormattedDate date={relatedBlog.pubDate} />
+                            <FormattedDate date={relatedBlog.pub_date} />
                           </div>
                           
                           <div className="flex items-center gap-1 text-[#035AA6] group-hover:text-[#11B4D9] transition-colors">

@@ -4,23 +4,6 @@ import { cookies } from 'next/headers';
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
-type RawSlide = Record<string, any>;
-
-const toCamelSlide = (item: RawSlide) => ({
-  id: item.id,
-  title: item.title,
-  subtitle: item.subtitle,
-  description: item.description,
-  buttonText: item.button_text,
-  buttonLink: item.button_link,
-  visualType: item.visual_type,
-  isActive: item.is_active,
-  sortOrder: item.sort_order,
-  createdAt: item.created_at,
-  updatedAt: item.updated_at,
-  deletedAt: item.deleted_at,
-});
-
 export async function GET(request: NextRequest) {
   try {
     const token =
@@ -41,13 +24,7 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    const mapped = {
-      ...data,
-      data: Array.isArray(data?.data)
-        ? data.data.map(toCamelSlide)
-        : [],
-    };
-    return NextResponse.json(mapped, { status: 200 });
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Error fetching slides:', error);
     return NextResponse.json(
@@ -64,24 +41,13 @@ export async function POST(request: NextRequest) {
       request.cookies.get('access_token')?.value ||
       (await cookies()).get('access_token')?.value;
 
-    const payload = {
-      title: body.title,
-      subtitle: body.subtitle,
-      description: body.description,
-      button_text: body.buttonText,
-      button_link: body.buttonLink,
-      visual_type: body.visualType,
-      is_active: body.isActive,
-      sort_order: body.sortOrder,
-    };
-
     const response = await fetch(`${API_URL}/slides`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -90,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(toCamelSlide(data), { status: 200 });
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Error creating slide:', error);
     return NextResponse.json(

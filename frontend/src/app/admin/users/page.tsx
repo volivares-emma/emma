@@ -223,16 +223,25 @@ export default function UsersPage() {
       const url = editUser ? `/api/users/${editUser.id}` : "/api/users";
 
       // payload en JSON (sin archivos)
-      const payload: UserCreatePayload & UserUpdatePayload = {
+      const basePayload = {
         username: form.username,
         email: form.email,
-        password: form.password || undefined,
-        role: form.role ?? "user",
+        role: form.role ?? "guest",
         first_name: form.first_name || undefined,
         last_name: form.last_name || undefined,
         phone: form.phone || undefined,
         is_active: form.is_active,
       };
+
+      const payload: UserCreatePayload | UserUpdatePayload = editUser
+        ? {
+            ...basePayload,
+            ...(form.password ? { password: form.password } : {}),
+          }
+        : {
+            ...basePayload,
+            password: form.password,
+          };
 
       const res = await fetch(url, {
         method,
