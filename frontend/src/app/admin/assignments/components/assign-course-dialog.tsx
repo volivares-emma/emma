@@ -90,7 +90,7 @@ export function AssignCourseDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[80vh] flex flex-col">
+      <DialogContent className="sm:max-w-150 max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Asignar curso a estudiantes</DialogTitle>
           <DialogDescription>
@@ -171,7 +171,7 @@ export function AssignCourseDialog({
               </div>
             </div>
 
-            <ScrollArea className="border rounded-md h-[200px]">
+            <ScrollArea className="border rounded-md h-50">
               <div className="p-3 space-y-2">
                 {users.map((user) => (
                   <div key={user.id} className="flex items-center space-x-3 py-2">

@@ -34,6 +34,10 @@ Web: http://localhost:3000
 2. Editar valores sensibles (`POSTGRES_PASSWORD`, `JWT_SECRET`, etc.)
 3. `docker compose up -d --build`
 
+### Detener y limpiar Docker
+1. Detener servicios: `docker compose down`
+2. Limpiar imágenes, contenedores y volúmenes: `docker system prune -a --volumes -f`
+
 Notas:
 - Caddy expone los puertos 80/443 y gestiona SSL.
 - El dominio se configura en `Caddyfile`.
